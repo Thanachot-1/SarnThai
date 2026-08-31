@@ -3,9 +3,13 @@ import { supabase, isSupabaseConfigured } from '../lib/supabase';
 const LOCAL_LIKES_PREFIX = 'sarnthai_likes';
 
 export const likeService = {
-  // Fetch liked product IDs for a user
+  // Fetch liked product IDs for a logged-in user
   async fetchUserLikes(userId?: string): Promise<string[]> {
-    if (userId && isSupabaseConfigured && supabase) {
+    if (!userId) {
+      return [];
+    }
+
+    if (isSupabaseConfigured && supabase) {
       try {
         const { data, error } = await supabase
           .from('likes')
@@ -22,41 +26,41 @@ export const likeService = {
       }
     }
 
-    const key = userId ? `${LOCAL_LIKES_PREFIX}_${userId}` : `${LOCAL_LIKES_PREFIX}_guest`;
-    const saved = localStorage.getItem(key);
+    const saved = localStorage.getItem(`${LOCAL_LIKES_PREFIX}_${userId}`);
     return saved ? JSON.parse(saved) : [];
   },
 
-  // Toggle Like on a product
-  async toggleLike(productId: string, userId?: string): Promise<{ liked: boolean; newLikedIds: string[] }> {
+  // Toggle Like on a product (Requires authenticated user)
+  async toggleLike(productId: string, userId: string): Promise<{ liked: boolean; newLikedIds: string[] }> {
+    if (!userId) {
+      return { liked: false, newLikedIds: [] };
+    }
+
     const currentLikes = await this.fetchUserLikes(userId);
     const isAlreadyLiked = currentLikes.includes(productId);
     const newLikedIds = isAlreadyLiked
       ? currentLikes.filter((id) => id !== productId)
       : [...currentLikes, productId];
 
-    // Save to local cache
-    const key = userId ? `${LOCAL_LIKES_PREFIX}_${userId}` : `${LOCAL_LIKES_PREFIX}_guest`;
-    localStorage.setItem(key, JSON.stringify(newLikedIds));
+    // Save to user local cache
+    localStorage.setItem(`${LOCAL_LIKES_PREFIX}_${userId}`, JSON.stringify(newLikedIds));
 
-    // Sync to Supabase
+    // Sync to Supabase cloud database
     if (isSupabaseConfigured && supabase) {
       try {
-        if (userId) {
-          if (isAlreadyLiked) {
-            await supabase
-              .from('likes')
-              .delete()
-              .eq('user_id', userId)
-              .eq('product_id', productId);
-          } else {
-            await supabase
-              .from('likes')
-              .insert([{ user_id: userId, product_id: productId }]);
-          }
+        if (isAlreadyLiked) {
+          await supabase
+            .from('likes')
+            .delete()
+            .eq('user_id', userId)
+            .eq('product_id', productId);
+        } else {
+          await supabase
+            .from('likes')
+            .insert([{ user_id: userId, product_id: productId }]);
         }
 
-        // Update total like count on the product
+        // Update total like count on the product in Supabase
         const { data: prod } = await supabase
           .from('products')
           .select('likes')

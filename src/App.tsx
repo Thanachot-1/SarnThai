@@ -165,9 +165,15 @@ export const App: React.FC = () => {
     showToast(`สั่งซื้อคำสั่งซื้อ ${order.id} เรียบร้อยแล้ว`);
   };
 
-  // 100% Dynamic Toggle Likes connected to Supabase & Local Database
+  // 100% Dynamic Toggle Likes connected to Supabase Database (Require Authentication)
   const handleToggleLike = async (productId: string) => {
-    const { liked, newLikedIds } = await likeService.toggleLike(productId, currentUser?.id);
+    if (!currentUser) {
+      setIsAuthOpen(true);
+      showToast('กรุณาเข้าสู่ระบบก่อนกดถูกใจผืนผ้า ❤️');
+      return;
+    }
+
+    const { liked, newLikedIds } = await likeService.toggleLike(productId, currentUser.id);
     setLikedIds(newLikedIds);
     setProducts((prev) =>
       prev.map((p) =>
@@ -301,6 +307,11 @@ export const App: React.FC = () => {
           }}
           likedCount={likedIds.length}
           onOpenLiked={() => {
+            if (!currentUser) {
+              setIsAuthOpen(true);
+              showToast('กรุณาเข้าสู่ระบบเพื่อดูรายการโปรดของคุณ ❤️');
+              return;
+            }
             setShowOnlyLiked(!showOnlyLiked);
             setActiveTab('explore');
           }}
