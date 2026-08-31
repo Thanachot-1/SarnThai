@@ -18,7 +18,6 @@ import { SellerDashboard } from './components/SellerDashboard';
 import { CartDrawer } from './components/CartDrawer';
 import { CheckoutModal } from './components/CheckoutModal';
 import { AuthModal } from './components/AuthModal';
-import { DeviceToggle } from './components/DeviceToggle';
 import { BookOpen, PlusCircle, Sparkles, Heart, Search, RefreshCw, Database } from 'lucide-react';
 import './styles/index.css';
 import './styles/components.css';
@@ -55,7 +54,6 @@ export const App: React.FC = () => {
   // View & Navigation State
   const [activeTab, setActiveTab] = useState<NavTab>('explore');
   const [showOnlyLiked, setShowOnlyLiked] = useState(false);
-  const [isMobileFrame, setIsMobileFrame] = useState(true);
 
   // Modals & Drawers State
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -291,10 +289,7 @@ export const App: React.FC = () => {
   const totalCartCount = cartItems.reduce((sum, it) => sum + it.quantity, 0);
 
   return (
-    <div className={`app-viewport-wrapper ${isMobileFrame ? 'desktop-frame' : ''}`}>
-      {/* Device Viewport Toggle (For Desktop Users) */}
-      <DeviceToggle isMobileFrame={isMobileFrame} onToggle={setIsMobileFrame} />
-
+    <div className="app-viewport-wrapper">
       {/* Main Mobile App Container */}
       <main className="app-container" id="sarnthai-app">
         {/* Sticky Header with Auth Profile Trigger */}
