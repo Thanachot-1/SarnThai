@@ -5,7 +5,6 @@ import { orderService } from './services/orderService';
 import { authService } from './services/authService';
 import { chatService } from './services/chatService';
 import { likeService } from './services/likeService';
-import { isSupabaseConfigured } from './lib/supabase';
 import { Header } from './components/Header';
 import { BottomNav, NavTab } from './components/BottomNav';
 import { RegionFilter } from './components/RegionFilter';
@@ -18,7 +17,7 @@ import { SellerDashboard } from './components/SellerDashboard';
 import { CartDrawer } from './components/CartDrawer';
 import { CheckoutModal } from './components/CheckoutModal';
 import { AuthModal } from './components/AuthModal';
-import { BookOpen, PlusCircle, Sparkles, Heart, Search, RefreshCw, Database } from 'lucide-react';
+import { BookOpen, PlusCircle, Sparkles, Heart, Search, RefreshCw } from 'lucide-react';
 import './styles/index.css';
 import './styles/components.css';
 
@@ -324,32 +323,6 @@ export const App: React.FC = () => {
           onOpenAuth={() => setIsAuthOpen(true)}
           onLogout={handleLogout}
         />
-
-        {/* Database Status Strip */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: '4px 16px',
-            backgroundColor: isSupabaseConfigured ? 'var(--accent-sage-light)' : 'var(--bg-subtle)',
-            fontSize: '11px',
-            color: isSupabaseConfigured ? 'var(--accent-sage)' : 'var(--text-muted)',
-            borderBottom: '1px solid var(--border-color)'
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <Database size={12} />
-            <span>
-              {isSupabaseConfigured
-                ? '🟢 Supabase Cloud Database Connected'
-                : '📦 Local Sync Database Mode'}
-            </span>
-          </div>
-          <span style={{ fontSize: '10.5px' }}>
-            {currentUser ? `👤 ${currentUser.role === 'seller' ? 'ช่างทอ' : 'ผู้ซื้อ'}` : 'ผู้เยี่ยมชม'}
-          </span>
-        </div>
 
         {/* VIEW 1: EXPLORE MARKETPLACE */}
         {activeTab === 'explore' && (
