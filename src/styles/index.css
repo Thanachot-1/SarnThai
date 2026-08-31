@@ -1,0 +1,189 @@
+/* SarnThai - Thai Minimal Design System */
+:root {
+  /* Color Palette - Thai Minimal Heritage */
+  --bg-main: #FAF8F5;            /* สีนวลฝ้ายธรรมชาติ */
+  --bg-surface: #FFFFFF;         /* ขาวบริสุทธิ์ */
+  --bg-card: #FFFFFF;
+  --bg-subtle: #F3EFEA;          /* นวลอุ่น */
+  --bg-dark: #1E324F;            /* สีครามลึก */
+  
+  --primary-kram: #2D4B73;       /* สีครามธรรมชาติ (Primary Indigo) */
+  --primary-kram-dark: #1E324F;
+  --primary-kram-light: #EBF1F8;
+  
+  --accent-terracotta: #B85D43;  /* สีดินเผา / หมากสุก (Terracotta Rust) */
+  --accent-terracotta-dark: #94442E;
+  --accent-terracotta-light: #FBEFEA;
+  
+  --accent-gold: #C58B38;        /* สีไหมทองคำ (Golden Silk Ochre) */
+  --accent-gold-light: #FDF7EC;
+  --accent-gold-border: #E8D4B0;
+  
+  --accent-sage: #507567;        /* สีเขียวใบเตย / ไพร */
+  --accent-sage-light: #EDF4F0;
+
+  --text-main: #262322;          /* สีไม้สักเข้ม (Teak Charcoal) */
+  --text-muted: #6E6864;         /* สีเทาดิน */
+  --text-light: #9B948F;
+  --text-inverse: #FAF8F5;
+
+  --border-color: #EAE4DC;
+  --border-focus: #2D4B73;
+  --divider: #F0EAE1;
+
+  /* Elevation & Shadows */
+  --shadow-xs: 0 1px 2px rgba(38, 35, 34, 0.04);
+  --shadow-sm: 0 2px 8px rgba(38, 35, 34, 0.06);
+  --shadow-md: 0 6px 16px rgba(38, 35, 34, 0.08);
+  --shadow-lg: 0 12px 32px rgba(38, 35, 34, 0.12);
+  --shadow-bottom-bar: 0 -4px 20px rgba(38, 35, 34, 0.07);
+
+  /* Radius */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --font-heading: 'Prompt', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Sarabun', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  background-color: #F0ECE6;
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle Thai weave texture pattern for background */
+body {
+  background-image: radial-gradient(#D6CEBE 0.75px, transparent 0.75px);
+  background-size: 16px 16px;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--text-main);
+  line-height: 1.3;
+}
+
+button {
+  font-family: var(--font-heading);
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+input, textarea, select {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--text-main);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  width: 100%;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--primary-kram);
+  box-shadow: 0 0 0 3px rgba(45, 75, 115, 0.12);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* Utilities */
+.text-kram { color: var(--primary-kram); }
+.text-terracotta { color: var(--accent-terracotta); }
+.text-gold { color: var(--accent-gold); }
+.text-muted { color: var(--text-muted); }
+
+.badge-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  font-size: 11.5px;
+  font-family: var(--font-heading);
+  font-weight: 500;
+}
+
+.badge-kram {
+  background-color: var(--primary-kram-light);
+  color: var(--primary-kram);
+}
+
+.badge-terracotta {
+  background-color: var(--accent-terracotta-light);
+  color: var(--accent-terracotta);
+}
+
+.badge-gold {
+  background-color: var(--accent-gold-light);
+  color: var(--accent-gold);
+  border: 1px solid var(--accent-gold-border);
+}
+
+.badge-sage {
+  background-color: var(--accent-sage-light);
+  color: var(--accent-sage);
+}
+
+/* Hide scrollbars for clean minimal swipe */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- SarnThai Minimal Weave & Shuttle Logo -->
+  <rect width="100" height="100" rx="24" fill="#1E324F"/>
+  <!-- Subtle Weave grid -->
+  <path d="M28 20V80M50 20V80M72 20V80" stroke="#FAF8F5" stroke-opacity="0.15" stroke-width="2" stroke-linecap="round"/>
+  <path d="M20 28H80M20 50H80M20 72H80" stroke="#FAF8F5" stroke-opacity="0.15" stroke-width="2" stroke-linecap="round"/>
+  <!-- Gold & Terracotta Shuttle / Diamond Motif (ลายลูกแก้ว / ขนมเปียกปูน) -->
+  <path d="M50 22L76 50L50 78L24 50Z" fill="url(#shuttleGrad)" stroke="#D4A359" stroke-width="2.5" stroke-linejoin="round"/>
+  <circle cx="50" cy="50" r="8" fill="#FAF8F5"/>
+  <path d="M50 36V64M36 50H64" stroke="#B85D43" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <defs>
+    <linearGradient id="shuttleGrad" x1="24" y1="22" x2="76" y2="78" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2D4B73" />
+      <stop offset="1" stop-color="#1E324F" />
+    </linearGradient>
+  </defs>
+</svg>
