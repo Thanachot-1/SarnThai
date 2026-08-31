@@ -35,11 +35,8 @@ export const App: React.FC = () => {
   // Liked products (100% Dynamic, 0 hardcoded defaults)
   const [likedIds, setLikedIds] = useState<string[]>([]);
 
-  // Shopping Cart State
-  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
-    const saved = localStorage.getItem('sarnthai_cart');
-    return saved ? JSON.parse(saved) : [];
-  });
+  // Shopping Cart State (Per User)
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   // Filter State
   const [filters, setFilters] = useState<FilterState>({
@@ -83,8 +80,15 @@ export const App: React.FC = () => {
       ]);
       setProducts(items);
       setCurrentUser(user);
-      const likes = await likeService.fetchUserLikes(user?.id);
-      setLikedIds(likes);
+      if (user) {
+        const likes = await likeService.fetchUserLikes(user.id);
+        setLikedIds(likes);
+        const savedCart = localStorage.getItem(`sarnthai_cart_${user.id}`);
+        if (savedCart) setCartItems(JSON.parse(savedCart));
+      } else {
+        setLikedIds([]);
+        setCartItems([]);
+      }
     } catch (e) {
       console.error('Error fetching data:', e);
     } finally {
@@ -101,29 +105,39 @@ export const App: React.FC = () => {
     likeService.fetchUserLikes(currentUser?.id).then(setLikedIds);
   }, [currentUser]);
 
-  // Persist Cart
+  // Persist Cart per logged-in user
   useEffect(() => {
-    localStorage.setItem('sarnthai_cart', JSON.stringify(cartItems));
-  }, [cartItems]);
+    if (currentUser) {
+      localStorage.setItem(`sarnthai_cart_${currentUser.id}`, JSON.stringify(cartItems));
+    }
+  }, [cartItems, currentUser]);
 
   // Auth Handlers
   const handleAuthSuccess = async (user: UserProfile) => {
     setCurrentUser(user);
     const userLikes = await likeService.fetchUserLikes(user.id);
     setLikedIds(userLikes);
+    const savedCart = localStorage.getItem(`sarnthai_cart_${user.id}`);
+    setCartItems(savedCart ? JSON.parse(savedCart) : []);
     showToast(`ยินดีต้อนรับคุณ ${user.name}`);
   };
 
   const handleLogout = async () => {
     await authService.signOut();
     setCurrentUser(null);
-    const guestLikes = await likeService.fetchUserLikes();
-    setLikedIds(guestLikes);
+    setLikedIds([]);
+    setCartItems([]);
     showToast('ออกจากระบบเรียบร้อยแล้ว');
   };
 
-  // Cart operations
+  // Cart operations (Require Authentication)
   const handleAddToCart = (product: Product, quantity = 1) => {
+    if (!currentUser) {
+      setIsAuthOpen(true);
+      showToast('กรุณาเข้าสู่ระบบก่อนเพิ่มผ้าลงในตะกร้าสินค้า 🛍️');
+      return;
+    }
+
     setCartItems((prev) => {
       const existing = prev.find((item) => item.product.id === product.id);
       if (existing) {
@@ -157,6 +171,13 @@ export const App: React.FC = () => {
   };
 
   const handleBuyNow = (product: Product) => {
+    if (!currentUser) {
+      setIsDetailOpen(false);
+      setIsAuthOpen(true);
+      showToast('กรุณาเข้าสู่ระบบก่อนดำเนินการสั่งซื้อผ้า 🛍️');
+      return;
+    }
+
     handleAddToCart(product, 1);
     setIsDetailOpen(false);
     setIsCartOpen(false);
@@ -220,15 +241,32 @@ export const App: React.FC = () => {
   // Handle Tab Switch
   const handleTabChange = (tab: NavTab) => {
     if (tab === 'create') {
+      if (!currentUser) {
+        setIsAuthOpen(true);
+        showToast('กรุณาเข้าสู่ระบบก่อนลงขายผืนผ้า 🧵');
+        return;
+      }
       setIsCreateOpen(true);
       return;
+    }
+    if (tab === 'seller') {
+      if (!currentUser) {
+        setIsAuthOpen(true);
+        showToast('กรุณาเข้าสู่ระบบเพื่อจัดการร้านค้าของคุณ 🏪');
+        return;
+      }
+    }
+    if (tab === 'chat') {
+      if (!currentUser) {
+        setIsAuthOpen(true);
+        showToast('กรุณาเข้าสู่ระบบเพื่อดูข้อความแชท 💬');
+        return;
+      }
+      setSelectedConversationId(null);
     }
     if (tab === 'wisdom') {
       setIsPatternGuideOpen(true);
       return;
-    }
-    if (tab === 'chat') {
-      setSelectedConversationId(null);
     }
     setShowOnlyLiked(false);
     setActiveTab(tab);
@@ -341,7 +379,14 @@ export const App: React.FC = () => {
             setActiveTab('explore');
           }}
           cartCount={totalCartCount}
-          onOpenCart={() => setIsCartOpen(true)}
+          onOpenCart={() => {
+            if (!currentUser) {
+              setIsAuthOpen(true);
+              showToast('กรุณาเข้าสู่ระบบเพื่อดูตะกร้าสินค้าของคุณ 🛍️');
+              return;
+            }
+            setIsCartOpen(true);
+          }}
           currentUser={currentUser}
           onOpenAuth={() => setIsAuthOpen(true)}
           onLogout={handleLogout}
