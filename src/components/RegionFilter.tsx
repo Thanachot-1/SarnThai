@@ -1,6 +1,6 @@
 import React from 'react';
 import { Region, Category, FilterState } from '../types';
-import { SlidersHorizontal } from 'lucide-react';
+import { SlidersHorizontal, X, RotateCcw, Search } from 'lucide-react';
 
 interface RegionFilterProps {
   filters: FilterState;
@@ -26,8 +26,144 @@ export const RegionFilter: React.FC<RegionFilterProps> = ({
   onFilterChange,
   availableCount,
 }) => {
+  const hasActiveFilters = Boolean(
+    filters.search ||
+    filters.region !== 'ทั้งหมด' ||
+    filters.category !== 'ทั้งหมด'
+  );
+
+  const handleClearAll = () => {
+    onFilterChange({
+      search: '',
+      region: 'ทั้งหมด',
+      category: 'ทั้งหมด',
+    });
+  };
+
   return (
     <div className="filter-tabs-container">
+      {/* Active Filter Tags Strip (Shows whenever search or filter is applied) */}
+      {hasActiveFilters && (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '6px',
+            paddingBottom: '8px',
+            marginBottom: '4px',
+            borderBottom: '1px dashed var(--divider)',
+          }}
+        >
+          <span style={{ fontSize: '11.5px', color: 'var(--text-light)', display: 'flex', alignItems: 'center', gap: '3px' }}>
+            ตัวกรองที่เลือก:
+          </span>
+
+          {/* Active Search Term Tag */}
+          {filters.search && (
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                background: 'var(--primary-kram-light)',
+                color: 'var(--primary-kram)',
+                padding: '2px 8px',
+                borderRadius: 'var(--radius-full)',
+                fontSize: '11.5px',
+                fontWeight: 600,
+              }}
+            >
+              <Search size={10} />
+              "{filters.search}"
+              <button
+                onClick={() => onFilterChange({ search: '' })}
+                style={{ display: 'flex', alignItems: 'center', padding: '1px', marginLeft: '2px', color: 'var(--primary-kram)' }}
+                title="ล้างคำค้นหา"
+                aria-label="ล้างคำค้นหา"
+              >
+                <X size={12} />
+              </button>
+            </span>
+          )}
+
+          {/* Active Region Tag */}
+          {filters.region !== 'ทั้งหมด' && (
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                background: 'var(--bg-subtle)',
+                color: 'var(--text-main)',
+                border: '1px solid var(--border-color)',
+                padding: '2px 8px',
+                borderRadius: 'var(--radius-full)',
+                fontSize: '11.5px',
+                fontWeight: 500,
+              }}
+            >
+              ภาค{filters.region}
+              <button
+                onClick={() => onFilterChange({ region: 'ทั้งหมด' })}
+                style={{ display: 'flex', alignItems: 'center', padding: '1px', marginLeft: '2px', color: 'var(--text-muted)' }}
+                title="ล้างภูมิภาค"
+                aria-label="ล้างภูมิภาค"
+              >
+                <X size={12} />
+              </button>
+            </span>
+          )}
+
+          {/* Active Category Tag */}
+          {filters.category !== 'ทั้งหมด' && (
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                background: 'var(--accent-terracotta-light)',
+                color: 'var(--accent-terracotta)',
+                padding: '2px 8px',
+                borderRadius: 'var(--radius-full)',
+                fontSize: '11.5px',
+                fontWeight: 500,
+              }}
+            >
+              {filters.category}
+              <button
+                onClick={() => onFilterChange({ category: 'ทั้งหมด' })}
+                style={{ display: 'flex', alignItems: 'center', padding: '1px', marginLeft: '2px', color: 'var(--accent-terracotta)' }}
+                title="ล้างหมวดหมู่"
+                aria-label="ล้างหมวดหมู่"
+              >
+                <X size={12} />
+              </button>
+            </span>
+          )}
+
+          {/* Reset All Filters Button */}
+          <button
+            onClick={handleClearAll}
+            style={{
+              fontSize: '11px',
+              color: 'var(--text-muted)',
+              textDecoration: 'underline',
+              background: 'none',
+              padding: '2px 6px',
+              marginLeft: 'auto',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '3px',
+              cursor: 'pointer',
+            }}
+          >
+            <RotateCcw size={10} />
+            ล้างทั้งหมด
+          </button>
+        </div>
+      )}
+
       {/* Regions Horizontal Swipeable Pills */}
       <div className="region-pills-row no-scrollbar">
         {REGIONS.map((region) => {

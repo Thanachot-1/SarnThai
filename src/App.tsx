@@ -593,13 +593,22 @@ export const App: React.FC = () => {
           onOpenAuth={() => setIsAuthOpen(true)}
         />
 
-        {/* Thai Pattern Guide Wisdom Modal */}
         <PatternGuideModal
           isOpen={isPatternGuideOpen}
           onClose={() => setIsPatternGuideOpen(false)}
           onSelectPatternSearch={(pattern) => {
-            setFilters((prev) => ({ ...prev, search: pattern }));
+            setFilters({
+              search: pattern,
+              region: 'ทั้งหมด',
+              category: 'ทั้งหมด',
+              minPrice: null,
+              maxPrice: null,
+              material: '',
+              sortBy: 'newest',
+            });
+            setShowOnlyLiked(false);
             setActiveTab('explore');
+            showToast(`แสดงผืนผ้าลาย "${pattern}" (กด X เพื่อล้างตัวกรอง)`);
           }}
         />
 
