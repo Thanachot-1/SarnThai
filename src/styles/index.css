@@ -141,6 +141,27 @@ input:focus, textarea:focus, select:focus {
   50% { opacity: 0.6; }
 }
 
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    #ECE7DF 0%,
+    #F6F2EA 50%,
+    #ECE7DF 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--radius-xs);
+}
+
 /* Utilities */
 .text-kram { color: var(--primary-kram); }
 .text-terracotta { color: var(--accent-terracotta); }

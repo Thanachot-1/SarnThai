@@ -17,6 +17,8 @@ import { SellerDashboard } from './components/SellerDashboard';
 import { CartDrawer } from './components/CartDrawer';
 import { CheckoutModal } from './components/CheckoutModal';
 import { AuthModal } from './components/AuthModal';
+import { SplashScreen } from './components/SplashScreen';
+import { ProductSkeleton } from './components/ProductSkeleton';
 import { BookOpen, PlusCircle, Sparkles, Heart, Search, RefreshCw } from 'lucide-react';
 import './styles/index.css';
 import './styles/components.css';
@@ -53,6 +55,8 @@ export const App: React.FC = () => {
   // View & Navigation State
   const [activeTab, setActiveTab] = useState<NavTab>('explore');
   const [showOnlyLiked, setShowOnlyLiked] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
+  const [isBannerLoaded, setIsBannerLoaded] = useState(false);
 
   // Modals & Drawers State
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -295,6 +299,14 @@ export const App: React.FC = () => {
 
   return (
     <div className="app-viewport-wrapper">
+      {/* App Splash Screen with Asset Preloader */}
+      {showSplash && (
+        <SplashScreen
+          isDataReady={!loading}
+          onFinish={() => setShowSplash(false)}
+        />
+      )}
+
       {/* Main Mobile App Container */}
       <main className="app-container" id="sarnthai-app">
         {/* Sticky Header with Auth Profile Trigger */}
@@ -369,10 +381,18 @@ export const App: React.FC = () => {
             {!showOnlyLiked && !filters.search && (
               <>
                 <div className="hero-story-card">
+                  {!isBannerLoaded && (
+                    <div className="skeleton-shimmer" style={{ position: 'absolute', inset: 0 }} />
+                  )}
                   <img
                     src="/images/banner.jpg"
                     alt="ช่างทอผ้าไทย สานไทย"
                     className="hero-banner-img"
+                    style={{
+                      opacity: isBannerLoaded ? 0.85 : 0,
+                      transition: 'opacity 0.4s ease'
+                    }}
+                    onLoad={() => setIsBannerLoaded(true)}
                   />
                   <div className="hero-gradient-overlay" />
                   <div className="hero-story-content">
@@ -422,8 +442,10 @@ export const App: React.FC = () => {
               availableCount={filteredProducts.length}
             />
 
-            {/* Products Feed Grid */}
-            {filteredProducts.length > 0 ? (
+            {/* Products Feed Grid (with Skeleton Shimmer State) */}
+            {loading ? (
+              <ProductSkeleton count={6} />
+            ) : filteredProducts.length > 0 ? (
               <div className="product-grid" style={{ marginTop: '12px' }}>
                 {filteredProducts.map((product) => (
                   <ProductCard

@@ -38,6 +38,12 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 }) => {
   const [isZoomed, setIsZoomed] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [isModalImgLoaded, setIsModalImgLoaded] = useState(false);
+
+  // Reset image loaded state when product changes
+  React.useEffect(() => {
+    setIsModalImgLoaded(false);
+  }, [product?.id]);
 
   if (!isOpen || !product) return null;
 
@@ -107,10 +113,26 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         <div className="modal-body">
           {/* Zoomable Fabric Texture View */}
           <div className="detail-img-container" onClick={() => setIsZoomed(!isZoomed)}>
+            {!isModalImgLoaded && (
+              <div
+                className="skeleton-shimmer"
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  zIndex: 1,
+                  borderRadius: '16px',
+                }}
+              />
+            )}
             <img
               src={product.images[0] || '/images/mudmee.jpg'}
               alt={product.title}
               className={`detail-img ${isZoomed ? 'zoomed' : ''}`}
+              style={{
+                opacity: isModalImgLoaded ? 1 : 0,
+                transition: 'opacity 0.35s ease',
+              }}
+              onLoad={() => setIsModalImgLoaded(true)}
             />
             <div className="zoom-guide-tag">
               {isZoomed ? (

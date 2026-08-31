@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Product } from '../types';
-import { Heart, CheckCircle2, ShoppingBag } from 'lucide-react';
+import { Heart, ShoppingBag } from 'lucide-react';
 
 interface ProductCardProps {
   product: Product;
@@ -17,6 +17,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   onClick,
   onAddToCart,
 }) => {
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
   const handleLikeClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onToggleLike(product.id);
@@ -27,6 +30,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     if (onAddToCart) onAddToCart(product);
   };
 
+  const imageSrc = hasError || !product.images[0] ? '/images/mudmee.jpg' : product.images[0];
+
   return (
     <div 
       className="product-card"
@@ -34,11 +39,25 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       id={`product-card-${product.id}`}
     >
       <div className="product-img-wrapper">
+        {/* Shimmer skeleton until image loads */}
+        {!isImageLoaded && (
+          <div className="product-img-skeleton skeleton-shimmer" />
+        )}
+
         <img
-          src={product.images[0] || '/images/mudmee.jpg'}
+          src={imageSrc}
           alt={product.title}
           className="product-img"
           loading="lazy"
+          style={{
+            opacity: isImageLoaded ? 1 : 0,
+            transition: 'opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+          }}
+          onLoad={() => setIsImageLoaded(true)}
+          onError={() => {
+            setHasError(true);
+            setIsImageLoaded(true);
+          }}
         />
         
         <span className="product-province-tag">
@@ -83,17 +102,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           {onAddToCart && (
             <button
               onClick={handleCartClick}
-              style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '8px',
-                backgroundColor: 'var(--primary-kram-light)',
-                color: 'var(--primary-kram)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                transition: 'all 0.15s ease'
-              }}
+              className="product-quick-cart-btn"
               title="เพิ่มลงตะกร้า"
               aria-label="เพิ่มลงตะกร้า"
             >

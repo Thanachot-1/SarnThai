@@ -1048,3 +1048,204 @@
   color: white;
   flex-shrink: 0;
 }
+
+/* ==========================================================================
+   PRODUCT IMAGE PROGRESSIVE LOADING & SKELETON CARDS
+   ========================================================================== */
+.product-img-skeleton {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.product-quick-cart-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background-color: var(--primary-kram-light);
+  color: var(--primary-kram);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.product-quick-cart-btn:hover {
+  background-color: var(--primary-kram);
+  color: white;
+}
+
+.skeleton-card {
+  cursor: default;
+  pointer-events: none;
+}
+
+.skeleton-card:active {
+  transform: none;
+}
+
+/* ==========================================================================
+   SPLASH SCREEN & ASSET PRELOADER (THAI MINIMAL HERITAGE)
+   ========================================================================== */
+.splash-screen-container {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: radial-gradient(circle at 50% 30%, #FAF8F5 0%, #EFE9E0 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.5s ease;
+  opacity: 1;
+  visibility: visible;
+}
+
+.splash-screen-container.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.splash-ambient-circle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.splash-ambient-1 {
+  width: 320px;
+  height: 320px;
+  background: rgba(197, 139, 56, 0.15); /* Gold */
+  top: 15%;
+  left: 20%;
+}
+
+.splash-ambient-2 {
+  width: 360px;
+  height: 360px;
+  background: rgba(45, 75, 115, 0.12); /* Kram */
+  bottom: 10%;
+  right: 15%;
+}
+
+.splash-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 360px;
+  width: 100%;
+}
+
+.splash-logo-wrapper {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.splash-logo-glow {
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(197, 139, 56, 0.25) 0%, rgba(45, 75, 115, 0) 70%);
+  animation: pulseGlow 2.5s infinite ease-in-out;
+}
+
+.splash-logo-image {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 16px rgba(38, 35, 34, 0.15));
+  animation: floatSoft 3s ease-in-out infinite;
+}
+
+@keyframes floatSoft {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.splash-text-block {
+  margin-bottom: 28px;
+}
+
+.splash-title {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary-kram);
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.splash-subtitle-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent-terracotta);
+  background: var(--accent-terracotta-light);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  letter-spacing: 0.5px;
+}
+
+.splash-tagline {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin-top: 4px;
+}
+
+.splash-progress-wrapper {
+  width: 100%;
+  max-width: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.splash-progress-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(45, 75, 115, 0.1);
+  border-radius: 9999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.splash-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-kram) 0%, var(--accent-terracotta) 50%, var(--accent-gold) 100%);
+  border-radius: 9999px;
+  transition: width 0.35s ease-out;
+}
+
+.splash-status-text {
+  font-size: 11.5px;
+  color: var(--text-light);
+  transition: all 0.2s ease;
+}
+
