@@ -89,7 +89,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-sheet" onClick={(e) => e.stopPropagation()}>
+      <div className="modal-sheet checkout-modal-sheet" onClick={(e) => e.stopPropagation()}>
         <div className="modal-drag-handle" />
 
         <div className="modal-header">

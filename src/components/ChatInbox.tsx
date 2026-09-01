@@ -173,7 +173,7 @@ export const ChatInbox: React.FC<ChatInboxProps> = ({
       : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80';
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 150px)', background: 'var(--bg-main)' }}>
+      <div className="chat-room-container" style={{ display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 150px)', background: 'var(--bg-main)' }}>
         {/* Chat Room Top Bar */}
         <div
           style={{
@@ -365,7 +365,7 @@ export const ChatInbox: React.FC<ChatInboxProps> = ({
   // VIEW A: INBOX LIST (รายการแชททั้งหมด)
   // ==========================================
   return (
-    <div style={{ padding: '16px 14px 24px' }}>
+    <div className="chat-inbox-container" style={{ padding: '16px 16px 24px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
         <h3 style={{ fontSize: '17px', fontWeight: 700, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '6px' }}>
           <MessageSquare size={20} color="var(--primary-kram)" />

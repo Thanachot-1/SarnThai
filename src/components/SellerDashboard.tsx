@@ -83,18 +83,9 @@ export const SellerDashboard: React.FC<SellerDashboardProps> = ({
   const activeCount = myProducts.filter((p) => p.status === 'available').length;
 
   return (
-    <div style={{ padding: '16px 16px 24px' }}>
+    <div className="seller-dashboard-container">
       {/* Seller Header Profile (Only Real User Data) */}
-      <div
-        style={{
-          background: 'linear-gradient(135deg, var(--primary-kram-dark) 0%, var(--primary-kram) 100%)',
-          borderRadius: 'var(--radius-md)',
-          padding: '18px 16px',
-          color: '#FFFFFF',
-          marginBottom: '16px',
-          boxShadow: 'var(--shadow-sm)'
-        }}
-      >
+      <div className="seller-hero-card">
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px' }}>
           <img
             src={
@@ -137,18 +128,7 @@ export const SellerDashboard: React.FC<SellerDashboardProps> = ({
       {/* Add Product Button */}
       <button
         onClick={onOpenCreateModal}
-        style={{
-          width: '100%',
-          padding: '14px',
-          backgroundColor: 'var(--accent-terracotta)',
-          color: '#FFFFFF',
-          borderRadius: 'var(--radius-sm)',
-          fontSize: '14px',
-          fontWeight: 600,
-          gap: '8px',
-          marginBottom: '20px',
-          boxShadow: '0 4px 12px rgba(184, 93, 67, 0.25)'
-        }}
+        className="seller-add-btn"
         id="btn-seller-add-product"
       >
         <Plus size={20} strokeWidth={2.5} />
@@ -164,7 +144,7 @@ export const SellerDashboard: React.FC<SellerDashboardProps> = ({
 
       {/* Products List */}
       {myProducts.length > 0 ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div className="seller-products-grid">
           {myProducts.map((p) => (
             <div
               key={p.id}

@@ -390,6 +390,8 @@ export const App: React.FC = () => {
           currentUser={currentUser}
           onOpenAuth={() => setIsAuthOpen(true)}
           onLogout={handleLogout}
+          activeTab={activeTab}
+          onTabChange={handleTabChange}
         />
 
         {/* VIEW 1: EXPLORE MARKETPLACE */}

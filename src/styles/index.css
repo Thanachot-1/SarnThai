@@ -208,3 +208,20 @@ input:focus, textarea:focus, select:focus {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Responsive Visibility Utilities */
+.show-on-desktop {
+  display: none !important;
+}
+.hide-on-desktop {
+  display: flex !important;
+}
+
+@media (min-width: 768px) {
+  .show-on-desktop {
+    display: flex !important;
+  }
+  .hide-on-desktop {
+    display: none !important;
+  }
+}

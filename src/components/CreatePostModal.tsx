@@ -188,7 +188,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-sheet" onClick={(e) => e.stopPropagation()}>
+      <div className="modal-sheet create-post-sheet" onClick={(e) => e.stopPropagation()}>
         <div className="modal-drag-handle" />
 
         <div className="modal-header">

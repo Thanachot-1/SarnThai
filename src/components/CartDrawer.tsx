@@ -29,9 +29,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const totalAmount = subtotal + shippingFee;
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-sheet" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-drag-handle" />
+    <div className="modal-backdrop cart-drawer-backdrop" onClick={onClose}>
+      <div className="modal-sheet cart-drawer-sheet" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-drag-handle hide-on-desktop" />
 
         <div className="modal-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>

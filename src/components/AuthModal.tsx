@@ -79,7 +79,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-sheet" onClick={(e) => e.stopPropagation()}>
+      <div className="modal-sheet auth-modal-sheet" onClick={(e) => e.stopPropagation()}>
         <div className="modal-drag-handle" />
 
         <div className="modal-header">

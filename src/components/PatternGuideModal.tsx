@@ -18,7 +18,7 @@ export const PatternGuideModal: React.FC<PatternGuideModalProps> = ({
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-sheet" onClick={(e) => e.stopPropagation()} style={{ maxHeight: '88vh' }}>
+      <div className="modal-sheet pattern-guide-sheet" onClick={(e) => e.stopPropagation()} style={{ maxHeight: '88vh' }}>
         <div className="modal-drag-handle" />
 
         {/* Modal Header */}
@@ -54,12 +54,12 @@ export const PatternGuideModal: React.FC<PatternGuideModalProps> = ({
         </div>
 
         {/* Modal Body */}
-        <div className="modal-body" style={{ padding: '16px 16px 30px' }}>
+        <div className="modal-body" style={{ padding: '16px 20px 30px' }}>
           <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '16px', lineHeight: 1.5 }}>
             เรียนรู้ความหมายอันเป็นมงคล เทคนิคการทอ และโอกาสที่เหมาะสมในการสวมใส่ผืนผ้าแต่ละลวดลาย
           </p>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div className="pattern-guide-grid">
             {PATTERN_GUIDES.map((guide: PatternGuide) => {
               const cleanKeyword = guide.name.split(' (')[0];
 
