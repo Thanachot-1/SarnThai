@@ -432,6 +432,20 @@ export const App: React.FC = () => {
             {!showOnlyLiked && !filters.search && (
               <>
                 <div className="hero-heritage-banner">
+                  {!isBannerLoaded && (
+                    <div className="skeleton-shimmer" style={{ position: 'absolute', inset: 0 }} />
+                  )}
+                  <img
+                    src="/images/banner.jpg"
+                    alt="ช่างทอผ้าไทย สานไทย"
+                    className="hero-banner-full-img"
+                    style={{
+                      opacity: isBannerLoaded ? 0.75 : 0,
+                      transition: 'opacity 0.4s ease'
+                    }}
+                    onLoad={() => setIsBannerLoaded(true)}
+                  />
+                  <div className="hero-heritage-gradient-overlay" />
                   <div className="hero-heritage-bg-grid" />
                   
                   <div className="hero-heritage-content">
@@ -460,21 +474,6 @@ export const App: React.FC = () => {
                       >
                         ตลาดกลางผ้าไทย
                       </button>
-                    </div>
-                  </div>
-
-                  <div className="hero-heritage-showcase show-on-desktop">
-                    <div className="hero-showcase-card">
-                      <img
-                        src="/images/banner.jpg"
-                        alt="ช่างทอผ้าไทย สานไทย"
-                        className="hero-showcase-img"
-                      />
-                      <div className="hero-showcase-gradient" />
-                      <div className="hero-stat-badge">
-                        <span className="stat-number">1,204</span>
-                        <span className="stat-label">ลวดลายในคลังข้อมูล</span>
-                      </div>
                     </div>
                   </div>
                 </div>
