@@ -20,7 +20,8 @@ import { AuthModal } from './components/AuthModal';
 import { SplashScreen } from './components/SplashScreen';
 import { ProductSkeleton } from './components/ProductSkeleton';
 import { FabricSwiper } from './components/FabricSwiper';
-import { BookOpen, PlusCircle, Sparkles, Heart, Search, RefreshCw, Flame } from 'lucide-react';
+import { SarnThaiChatBotModal, SarnThaiChatBotTrigger } from './components/SarnThaiChatBotModal';
+import { BookOpen, PlusCircle, Sparkles, Heart, Search, RefreshCw, Flame, Bot } from 'lucide-react';
 import './styles/index.css';
 import './styles/components.css';
 
@@ -63,6 +64,7 @@ export const App: React.FC = () => {
   const [isPatternGuideOpen, setIsPatternGuideOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [isChatBotOpen, setIsChatBotOpen] = useState(false);
   const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
   const [toastNotification, setToastNotification] = useState<string | null>(null);
 
@@ -393,6 +395,7 @@ export const App: React.FC = () => {
           onLogout={handleLogout}
           activeTab={activeTab}
           onTabChange={handleTabChange}
+          onOpenChatBot={() => setIsChatBotOpen(true)}
         />
 
         {/* VIEW 1: EXPLORE MARKETPLACE */}
@@ -674,6 +677,25 @@ export const App: React.FC = () => {
           isOpen={isAuthOpen}
           onClose={() => setIsAuthOpen(false)}
           onAuthSuccess={handleAuthSuccess}
+        />
+
+        {/* SarnThai AI ChatBot (Typhoon 2.5 30B) Floating Trigger & Modal */}
+        <SarnThaiChatBotTrigger
+          isOpen={isChatBotOpen}
+          onClick={() => setIsChatBotOpen(true)}
+        />
+
+        <SarnThaiChatBotModal
+          isOpen={isChatBotOpen}
+          onClose={() => setIsChatBotOpen(false)}
+          onOpenPatternGuide={() => {
+            setIsChatBotOpen(false);
+            setIsPatternGuideOpen(true);
+          }}
+          onOpenSwipe={() => {
+            setIsChatBotOpen(false);
+            setActiveTab('swipe');
+          }}
         />
 
         {/* Floating Toast Notification */}

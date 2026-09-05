@@ -17,6 +17,7 @@ interface HeaderProps {
   activeTab?: NavTab;
   onTabChange?: (tab: NavTab) => void;
   unreadChatCount?: number;
+  onOpenChatBot?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -33,6 +34,7 @@ export const Header: React.FC<HeaderProps> = ({
   activeTab = 'explore',
   onTabChange,
   unreadChatCount = 0,
+  onOpenChatBot,
 }) => {
   return (
     <header className="app-header">
@@ -111,6 +113,19 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Desktop & Mobile Header Actions */}
           <div className="header-actions">
+            {/* AI ChatBot Assistant Button */}
+            {onOpenChatBot && (
+              <button
+                className="header-icon-btn"
+                title="ถามน้องสานไหม AI (Typhoon 2.5)"
+                onClick={onOpenChatBot}
+                id="header-btn-ai-chat"
+                aria-label="ถามน้องสานไหม AI"
+              >
+                <Sparkles size={17} color="var(--accent-gold)" />
+              </button>
+            )}
+
             {/* Liked Items */}
             <button 
               className="header-icon-btn" 
