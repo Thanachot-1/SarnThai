@@ -1,7 +1,8 @@
 import React from 'react';
-import { Sparkles, BookOpen, Plus, MessageCircle, Store } from 'lucide-react';
+import { NavTab } from '../types';
+import { Sparkles, Plus, MessageCircle, Store, Flame } from 'lucide-react';
 
-export type NavTab = 'explore' | 'wisdom' | 'create' | 'chat' | 'seller';
+export type { NavTab };
 
 interface BottomNavProps {
   activeTab: NavTab;
@@ -22,16 +23,16 @@ export const BottomNav: React.FC<BottomNavProps> = ({
         id="nav-explore"
       >
         <Sparkles size={22} />
-        <span>สำรวจตลาด</span>
+        <span>สำรวจ</span>
       </button>
 
       <button 
-        className={`nav-item ${activeTab === 'wisdom' ? 'active' : ''}`}
-        onClick={() => onTabChange('wisdom')}
-        id="nav-wisdom"
+        className={`nav-item ${activeTab === 'swipe' ? 'active' : ''}`}
+        onClick={() => onTabChange('swipe')}
+        id="nav-swipe"
       >
-        <BookOpen size={22} />
-        <span>คู่มือลายผ้า</span>
+        <Flame size={22} />
+        <span>ปัดผ้า</span>
       </button>
 
       {/* Floating Center Button for Sellers */}

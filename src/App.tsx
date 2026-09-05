@@ -19,7 +19,8 @@ import { CheckoutModal } from './components/CheckoutModal';
 import { AuthModal } from './components/AuthModal';
 import { SplashScreen } from './components/SplashScreen';
 import { ProductSkeleton } from './components/ProductSkeleton';
-import { BookOpen, PlusCircle, Sparkles, Heart, Search, RefreshCw } from 'lucide-react';
+import { FabricSwiper } from './components/FabricSwiper';
+import { BookOpen, PlusCircle, Sparkles, Heart, Search, RefreshCw, Flame } from 'lucide-react';
 import './styles/index.css';
 import './styles/components.css';
 
@@ -451,8 +452,22 @@ export const App: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Quick Action Cards: Pattern Guide & Seller Shortcut */}
+                {/* Quick Action Cards: Swipe Discovery, Pattern Guide & Seller Shortcut */}
                 <div className="quick-action-strip">
+                  <div
+                    className="quick-action-card swipe"
+                    onClick={() => setActiveTab('swipe')}
+                    id="btn-quick-swipe"
+                  >
+                    <div className="quick-action-icon">
+                      <Flame size={18} />
+                    </div>
+                    <div className="quick-action-info">
+                      <h4>ปัดค้นหาผ้า</h4>
+                      <p>ปัดซ้ายขวาเลือกลาย</p>
+                    </div>
+                  </div>
+
                   <div
                     className="quick-action-card guide"
                     onClick={() => setIsPatternGuideOpen(true)}
@@ -539,6 +554,24 @@ export const App: React.FC = () => {
               </div>
             )}
           </div>
+        )}
+
+        {/* VIEW: FABRIC SWIPE DISCOVERY (ปัดผ้า) */}
+        {activeTab === 'swipe' && (
+          <FabricSwiper
+            products={products}
+            likedIds={likedIds}
+            onToggleLike={handleToggleLike}
+            onSelectProduct={(p) => {
+              setSelectedProduct(p);
+              setIsDetailOpen(true);
+            }}
+            onAddToCart={(p) => handleAddToCart(p, 1)}
+            onBuyNow={handleBuyNow}
+            onExploreAll={() => setActiveTab('explore')}
+            currentUser={currentUser}
+            onOpenAuth={() => setIsAuthOpen(true)}
+          />
         )}
 
         {/* VIEW 2: REAL CHAT INBOX & CONVERSATIONS */}

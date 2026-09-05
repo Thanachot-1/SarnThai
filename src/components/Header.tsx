@@ -1,7 +1,7 @@
 import React from 'react';
 import { UserProfile } from '../types';
 import { NavTab } from './BottomNav';
-import { Search, X, Heart, ShoppingBag, User, LogOut, Store, Sparkles, BookOpen, PlusCircle, MessageCircle } from 'lucide-react';
+import { Search, X, Heart, ShoppingBag, User, LogOut, Store, Sparkles, BookOpen, PlusCircle, MessageCircle, Flame } from 'lucide-react';
 
 interface HeaderProps {
   searchTerm: string;
@@ -60,6 +60,15 @@ export const Header: React.FC<HeaderProps> = ({
               >
                 <Sparkles size={16} />
                 <span>สำรวจตลาด</span>
+              </button>
+
+              <button
+                className={`desktop-nav-item ${activeTab === 'swipe' ? 'active' : ''}`}
+                onClick={() => onTabChange('swipe')}
+                id="header-nav-swipe"
+              >
+                <Flame size={16} />
+                <span>ปัดผ้า</span>
               </button>
 
               <button

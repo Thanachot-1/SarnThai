@@ -10,6 +10,8 @@ export type Category =
   | 'ผ้าบาติก' 
   | 'ผ้าฝ้ายทอมือ';
 
+export type NavTab = 'explore' | 'swipe' | 'wisdom' | 'create' | 'chat' | 'seller';
+
 export type ProductStatus = 'available' | 'reserved' | 'sold';
 
 export type UserRole = 'seller' | 'buyer';
