@@ -428,30 +428,49 @@ export const App: React.FC = () => {
               </div>
             )}
 
-            {/* Story Banner for Explore Mode */}
+            {/* Story Banner for Explore Mode (SanThai Heritage Archive) */}
             {!showOnlyLiked && !filters.search && (
               <>
-                <div className="hero-story-card">
-                  {!isBannerLoaded && (
-                    <div className="skeleton-shimmer" style={{ position: 'absolute', inset: 0 }} />
-                  )}
-                  <img
-                    src="/images/banner.jpg"
-                    alt="ช่างทอผ้าไทย สานไทย"
-                    className="hero-banner-img"
-                    style={{
-                      opacity: isBannerLoaded ? 0.85 : 0,
-                      transition: 'opacity 0.4s ease'
-                    }}
-                    onLoad={() => setIsBannerLoaded(true)}
-                  />
-                  <div className="hero-gradient-overlay" />
-                  <div className="hero-story-content">
-                    <span className="hero-badge">
-                      <Sparkles size={12} /> สานต่อลมหายใจผ้าทอมือ
-                    </span>
-                    <h2>ส่งตรงจากกี่ทอผ้าสู่มือคุณ</h2>
-                    <p>สนับสนุนช่างทอพื้นบ้าน ชุมชนหัตถกรรมไทยแท้ 100%</p>
+                <div className="hero-heritage-banner">
+                  <div className="hero-heritage-bg-grid" />
+                  
+                  <div className="hero-heritage-content">
+                    <div className="hero-archive-badge">
+                      <span>✦ SANTHAI ARCHIVE</span>
+                    </div>
+                    <h2>สืบสานมรดกหัตถศิลป์ไทย<br className="hero-br-desktop" />สู่โลกดิจิทัล</h2>
+                    <p>
+                      แพลตฟอร์มรวบรวมและเผยแพร่ลวดลายผ้าไทยอันทรงคุณค่า ภายใต้การดูแลร่วมกับเครือข่ายช่างทอทั่วประเทศ พร้อมระบบยืนยันตัวตนช่างฝีมือ และเรื่องราวความเป็นมาของทุกผืนผ้า
+                    </p>
+                    <div className="hero-cta-row">
+                      <button 
+                        className="hero-btn-gold"
+                        onClick={() => setIsPatternGuideOpen(true)}
+                        id="btn-hero-guide"
+                      >
+                        สืบค้นคลังข้อมูล
+                      </button>
+                      <button 
+                        className="hero-btn-outline"
+                        onClick={() => {
+                          const filterEl = document.querySelector('.filter-tabs-container');
+                          filterEl?.scrollIntoView({ behavior: 'smooth' });
+                        }}
+                        id="btn-hero-market"
+                      >
+                        ตลาดกลางผ้าไทย
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="hero-heritage-showcase show-on-desktop">
+                    <div className="hero-showcase-card">
+                      <div className="hero-showcase-radial" />
+                      <div className="hero-stat-badge">
+                        <span className="stat-number">1,204</span>
+                        <span className="stat-label">ลวดลายในคลังข้อมูล</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 

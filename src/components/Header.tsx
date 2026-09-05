@@ -45,11 +45,8 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="brand-text-block">
               <h1>
                 สานไทย
-                <span className="brand-badge-sub">
-                  ตลาดผ้าทอมือ
-                </span>
               </h1>
-              <span className="brand-tagline">ส่งตรงจากช่างทอชุมชนทั่วประเทศ</span>
+              <span className="brand-tagline">SanThai Heritage Craft</span>
             </div>
           </div>
 
