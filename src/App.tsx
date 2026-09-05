@@ -465,7 +465,12 @@ export const App: React.FC = () => {
 
                   <div className="hero-heritage-showcase show-on-desktop">
                     <div className="hero-showcase-card">
-                      <div className="hero-showcase-radial" />
+                      <img
+                        src="/images/banner.jpg"
+                        alt="ช่างทอผ้าไทย สานไทย"
+                        className="hero-showcase-img"
+                      />
+                      <div className="hero-showcase-gradient" />
                       <div className="hero-stat-badge">
                         <span className="stat-number">1,204</span>
                         <span className="stat-label">ลวดลายในคลังข้อมูล</span>
