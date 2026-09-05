@@ -117,10 +117,10 @@ export const Header: React.FC<HeaderProps> = ({
             {onOpenChatBot && (
               <button
                 className="header-icon-btn"
-                title="ถามน้องสานไหม AI (Typhoon 2.5)"
+                title="SarnThai ChatBot (OpenTyphoon AI)"
                 onClick={onOpenChatBot}
                 id="header-btn-ai-chat"
-                aria-label="ถามน้องสานไหม AI"
+                aria-label="SarnThai ChatBot"
               >
                 <Sparkles size={17} color="var(--accent-gold)" />
               </button>

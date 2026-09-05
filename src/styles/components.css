@@ -2859,6 +2859,55 @@
   border-color: #D6CABA;
 }
 
+.aichat-heading-line {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary-kram);
+  margin-top: 6px;
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+.aichat-paragraph-line {
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+
+.aichat-bullet-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: 3px;
+  line-height: 1.5;
+}
+
+.aichat-bullet-dot {
+  color: var(--accent-terracotta);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.aichat-bullet-text {
+  flex: 1;
+}
+
+.aichat-strong {
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.bubble-user .aichat-strong {
+  color: #FFFFFF;
+}
+
+.aichat-divider {
+  height: 1px;
+  background: var(--divider);
+  margin: 6px 0;
+}
+
 .aichat-stream-cursor {
   display: inline-block;
   color: var(--accent-terracotta);

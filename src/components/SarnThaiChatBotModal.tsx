@@ -7,11 +7,6 @@ import {
   Trash2, 
   Bot, 
   User, 
-  MessageCircle, 
-  ChevronDown, 
-  RefreshCw,
-  Flame,
-  BookOpen
 } from 'lucide-react';
 
 interface SarnThaiChatBotModalProps {
@@ -22,12 +17,82 @@ interface SarnThaiChatBotModalProps {
 }
 
 const QUICK_PROMPTS = [
-  { label: '🌸 ผ้าใส่ไปงานแต่ง', prompt: 'ช่วยแนะนำผ้าไทยที่เหมาะสำหรับใส่ไปร่วมงานแต่งงานหน่อยค่ะ ต้องเลือกสีและลายแบบไหนดี?' },
+  { label: '🌸 ผ้าใส่ไปงานแต่ง', prompt: 'ช่วยแนะนำผ้าไทยที่เหมาะสำหรับใส่ไปร่วมงานแต่งงานหน่อยครับ ต้องเลือกสีและลายแบบไหนดี?' },
   { label: '🌿 วิธีซักผ้าคราม', prompt: 'ผ้าครามธรรมชาติมีขั้นตอนการซักและดูแลรักษาอย่างไรไม่ให้สีตกและคงความเงางาม?' },
   { label: '👑 ความหมายลายพิกุล', prompt: 'ลายพิกุลแก้วและลายนาคในผ้าไทยมีความหมายมงคลและประวัติความเป็นมาอย่างไร?' },
   { label: '🧵 มัดหมี่ vs แพรวา', prompt: 'ผ้าไหมมัดหมี่ กับ ผ้าแพรวา ต่างกันอย่างไร ทั้งในแง่เทคนิคการทอและเอกลักษณ์?' },
   { label: '✨ แนะนำการปัดผ้า', prompt: 'ฟีเจอร์ "ปัดผ้า" ในระบบสานไทยใช้งานอย่างไร และช่วยเลือกผ้าได้อย่างไร?' },
 ];
+
+/**
+ * Format message text into clean, beautiful typography without raw markdown artifacts
+ */
+function renderFormattedMessage(rawText: string) {
+  if (!rawText) return null;
+
+  // Split into lines
+  const lines = rawText.split('\n');
+
+  return lines.map((line, idx) => {
+    let cleanLine = line.trim();
+
+    // Skip horizontal divider lines
+    if (cleanLine === '---' || cleanLine === '***' || cleanLine === '___') {
+      return <div key={idx} className="aichat-divider" />;
+    }
+
+    if (!cleanLine) {
+      return <div key={idx} style={{ height: '6px' }} />;
+    }
+
+    // Check for header level 1-3
+    const isHeader = /^#{1,4}\s+/.test(cleanLine);
+    if (isHeader) {
+      cleanLine = cleanLine.replace(/^#{1,4}\s+/, '');
+    }
+
+    // Check for bullet list item
+    const isBullet = /^[-*•]\s+/.test(cleanLine);
+    if (isBullet) {
+      cleanLine = cleanLine.replace(/^[-*•]\s+/, '');
+    }
+
+    // Helper to render bold text
+    const parseBoldParts = (text: string) => {
+      const parts = text.split(/(\*\*.*?\*\*)/g);
+      return parts.map((part, pIdx) => {
+        if (part.startsWith('**') && part.endsWith('**')) {
+          const inner = part.slice(2, -2);
+          return <strong key={pIdx} className="aichat-strong">{inner}</strong>;
+        }
+        return part;
+      });
+    };
+
+    if (isHeader) {
+      return (
+        <h5 key={idx} className="aichat-heading-line">
+          {parseBoldParts(cleanLine)}
+        </h5>
+      );
+    }
+
+    if (isBullet) {
+      return (
+        <div key={idx} className="aichat-bullet-line">
+          <span className="aichat-bullet-dot">•</span>
+          <span className="aichat-bullet-text">{parseBoldParts(cleanLine)}</span>
+        </div>
+      );
+    }
+
+    return (
+      <p key={idx} className="aichat-paragraph-line">
+        {parseBoldParts(cleanLine)}
+      </p>
+    );
+  });
+}
 
 export const SarnThaiChatBotModal: React.FC<SarnThaiChatBotModalProps> = ({
   isOpen,
@@ -94,7 +159,7 @@ export const SarnThaiChatBotModal: React.FC<SarnThaiChatBotModalProps> = ({
           const assistantMessage: AIChatMessage = {
             id: `assistant-${Date.now()}`,
             role: 'assistant',
-            content: fullText || 'ขออภัยค่ะ ไม่สามารถประมวลผลข้อความได้ในขณะนี้ กรุณาลองใหม่อีกครั้งนะคะ',
+            content: fullText || 'ขออภัยครับ ไม่สามารถประมวลผลข้อความได้ในขณะนี้ กรุณาลองใหม่อีกครั้งนะครับ',
             timestamp: new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }),
           };
           const finalMessages = [...newHistory, assistantMessage];
@@ -109,7 +174,7 @@ export const SarnThaiChatBotModal: React.FC<SarnThaiChatBotModalProps> = ({
           const errorMessage: AIChatMessage = {
             id: `err-${Date.now()}`,
             role: 'assistant',
-            content: 'ขออภัยค่ะ เกิดข้อผิดพลาดในการเชื่อมต่อกับ OpenTyphoon AI กรุณาลองใหม่อีกครั้งนะคะ 🙇‍♀️',
+            content: 'ขออภัยครับ เกิดข้อผิดพลาดในการเชื่อมต่อกับ OpenTyphoon AI กรุณาลองใหม่อีกครั้งนะครับ 🙇‍♂️',
             timestamp: new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }),
           };
           const finalMessages = [...newHistory, errorMessage];
@@ -129,7 +194,7 @@ export const SarnThaiChatBotModal: React.FC<SarnThaiChatBotModalProps> = ({
 
   // Clear chat
   const handleClearChat = () => {
-    if (window.confirm('คุณต้องการล้างประวัติการสนทนากับน้องสานไหมทั้งหมดใช่หรือไม่?')) {
+    if (window.confirm('คุณต้องการล้างประวัติการสนทนาทั้งหมดใช่หรือไม่?')) {
       if (abortStreamRef.current) {
         abortStreamRef.current();
       }
@@ -163,7 +228,7 @@ export const SarnThaiChatBotModal: React.FC<SarnThaiChatBotModalProps> = ({
             <div className="aichat-avatar-wrapper">
               <img 
                 src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80" 
-                alt="น้องสานไหม AI" 
+                alt="SarnThai ChatBot" 
                 className="aichat-avatar-img"
               />
               <span className="aichat-online-dot" />
@@ -171,9 +236,9 @@ export const SarnThaiChatBotModal: React.FC<SarnThaiChatBotModalProps> = ({
 
             <div className="aichat-header-text">
               <div className="aichat-name-row">
-                <h4>น้องสานไหม</h4>
+                <h4>SarnThai ChatBot</h4>
                 <span className="aichat-badge-ai">
-                  <Sparkles size={11} /> AI ผู้ช่วยผ้าไทย
+                  <Sparkles size={11} /> ผู้ช่วยผ้าไทย AI
                 </span>
               </div>
               <span className="aichat-model-tag">
@@ -231,11 +296,7 @@ export const SarnThaiChatBotModal: React.FC<SarnThaiChatBotModalProps> = ({
 
               <div className="aichat-msg-content-block">
                 <div className={`aichat-bubble ${msg.role === 'user' ? 'bubble-user' : 'bubble-assistant'}`}>
-                  {msg.content.split('\n').map((paragraph, pIdx) => (
-                    <p key={pIdx} style={{ marginBottom: paragraph ? '6px' : '0' }}>
-                      {paragraph}
-                    </p>
-                  ))}
+                  {renderFormattedMessage(msg.content)}
                 </div>
                 <span className="aichat-msg-time">{msg.timestamp}</span>
               </div>
@@ -257,11 +318,7 @@ export const SarnThaiChatBotModal: React.FC<SarnThaiChatBotModalProps> = ({
               <div className="aichat-msg-content-block">
                 <div className="aichat-bubble bubble-assistant streaming">
                   {streamingDelta ? (
-                    streamingDelta.split('\n').map((line, lIdx) => (
-                      <p key={lIdx} style={{ marginBottom: line ? '6px' : '0' }}>
-                        {line}
-                      </p>
-                    ))
+                    renderFormattedMessage(streamingDelta)
                   ) : (
                     <div className="aichat-typing-indicator">
                       <span className="typing-dot" />
@@ -335,14 +392,14 @@ export const SarnThaiChatBotTrigger: React.FC<SarnThaiChatBotTriggerProps> = ({
       <button 
         className="sarnthai-bot-floating-btn"
         onClick={onClick}
-        title="คุยกับน้องสานไหม AI (Typhoon 2.5)"
-        aria-label="คุยกับน้องสานไหม AI"
+        title="SarnThai ChatBot (OpenTyphoon AI)"
+        aria-label="SarnThai ChatBot"
       >
         <div className="sarnthai-bot-icon-glow">
           <Sparkles size={20} className="sparkle-icon" />
         </div>
         <span className="sarnthai-bot-label">
-          ถามน้องสานไหม AI
+          SarnThai ChatBot
         </span>
       </button>
     </div>
