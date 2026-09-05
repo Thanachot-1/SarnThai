@@ -64,10 +64,16 @@
 }
 
 .brand-logo-img {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(45, 75, 115, 0.2);
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  box-shadow: 0 3px 10px rgba(59, 20, 55, 0.25);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.brand-container:hover .brand-logo-img {
+  transform: translateY(-1px) scale(1.04);
+  box-shadow: 0 4px 14px rgba(59, 20, 55, 0.35);
 }
 
 .brand-text-block h1 {
@@ -1811,7 +1817,7 @@
   position: absolute;
   inset: -12px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(197, 139, 56, 0.25) 0%, rgba(45, 75, 115, 0) 70%);
+  background: radial-gradient(circle, rgba(212, 163, 89, 0.35) 0%, rgba(59, 20, 55, 0) 70%);
   animation: pulseGlow 2.5s infinite ease-in-out;
 }
 
