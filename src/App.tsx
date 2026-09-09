@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Product, FilterState, ProductStatus, CartItem, Order, UserProfile } from './types';
+import { Product, FilterState, ProductStatus, CartItem, Order, UserProfile, Category } from './types';
 import { productService } from './services/productService';
 import { orderService } from './services/orderService';
 import { authService } from './services/authService';
@@ -21,7 +21,8 @@ import { SplashScreen } from './components/SplashScreen';
 import { ProductSkeleton } from './components/ProductSkeleton';
 import { FabricSwiper } from './components/FabricSwiper';
 import { SarnThaiChatBotModal, SarnThaiChatBotTrigger } from './components/SarnThaiChatBotModal';
-import { BookOpen, PlusCircle, Sparkles, Heart, Search, RefreshCw, Flame, Bot } from 'lucide-react';
+import { FabricScannerModal } from './components/FabricScannerModal';
+import { BookOpen, PlusCircle, Sparkles, Heart, Search, RefreshCw, Flame, Bot, Camera } from 'lucide-react';
 import './styles/index.css';
 import './styles/components.css';
 
@@ -65,6 +66,7 @@ export const App: React.FC = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isChatBotOpen, setIsChatBotOpen] = useState(false);
+  const [isScannerOpen, setIsScannerOpen] = useState(false);
   const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
   const [toastNotification, setToastNotification] = useState<string | null>(null);
 
@@ -275,6 +277,22 @@ export const App: React.FC = () => {
     setActiveTab(tab);
   };
 
+  // Filter marketplace products from AI Fabric Scanner result
+  const handleScanResultFilter = (categoryKey: string, fabricType: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      category: (categoryKey as Category) || 'ทั้งหมด',
+      search: '',
+    }));
+    setActiveTab('explore');
+    setShowOnlyLiked(false);
+    showToast(`กรองผ้าในตลาดตามผลการสแกน: "${categoryKey || fabricType}" 🧵`);
+    setTimeout(() => {
+      const filterEl = document.querySelector('.filter-tabs-container') || document.querySelector('.products-grid');
+      filterEl?.scrollIntoView({ behavior: 'smooth' });
+    }, 200);
+  };
+
   // Open Real Chat Room from Product Detail Modal
   const handleOpenChatFromDetail = async (product: Product) => {
     if (!currentUser) {
@@ -396,6 +414,7 @@ export const App: React.FC = () => {
           activeTab={activeTab}
           onTabChange={handleTabChange}
           onOpenChatBot={() => setIsChatBotOpen(true)}
+          onOpenScanner={() => setIsScannerOpen(true)}
         />
 
         {/* VIEW 1: EXPLORE MARKETPLACE */}
@@ -478,8 +497,22 @@ export const App: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Quick Action Cards: Swipe Discovery, Pattern Guide & Seller Shortcut */}
+                {/* Quick Action Cards: Scanner AI, Swipe Discovery, Pattern Guide & Seller Shortcut */}
                 <div className="quick-action-strip">
+                  <div
+                    className="quick-action-card scanner"
+                    onClick={() => setIsScannerOpen(true)}
+                    id="btn-quick-scanner"
+                  >
+                    <div className="quick-action-icon scanner-icon-gold">
+                      <Camera size={18} />
+                    </div>
+                    <div className="quick-action-info">
+                      <h4>สแกนผ้า AI</h4>
+                      <p>ถ่ายรูปจำแนกลายผ้า</p>
+                    </div>
+                  </div>
+
                   <div
                     className="quick-action-card swipe"
                     onClick={() => setActiveTab('swipe')}
@@ -718,6 +751,17 @@ export const App: React.FC = () => {
           onOpenSwipe={() => {
             setIsChatBotOpen(false);
             setActiveTab('swipe');
+          }}
+        />
+
+        {/* SarnThai AI Fabric Scanner Modal (Gemini 2.5 Flash Vision) */}
+        <FabricScannerModal
+          isOpen={isScannerOpen}
+          onClose={() => setIsScannerOpen(false)}
+          onFindInMarket={handleScanResultFilter}
+          onAskChatBot={() => {
+            setIsScannerOpen(false);
+            setIsChatBotOpen(true);
           }}
         />
 

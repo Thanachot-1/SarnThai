@@ -1,7 +1,7 @@
 import React from 'react';
 import { UserProfile } from '../types';
 import { NavTab } from './BottomNav';
-import { Search, X, Heart, ShoppingBag, User, LogOut, Store, Sparkles, BookOpen, PlusCircle, MessageCircle, Flame } from 'lucide-react';
+import { Search, X, Heart, ShoppingBag, User, LogOut, Store, Sparkles, BookOpen, PlusCircle, MessageCircle, Flame, Camera } from 'lucide-react';
 
 interface HeaderProps {
   searchTerm: string;
@@ -18,6 +18,7 @@ interface HeaderProps {
   onTabChange?: (tab: NavTab) => void;
   unreadChatCount?: number;
   onOpenChatBot?: () => void;
+  onOpenScanner?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -35,6 +36,7 @@ export const Header: React.FC<HeaderProps> = ({
   onTabChange,
   unreadChatCount = 0,
   onOpenChatBot,
+  onOpenScanner,
 }) => {
   return (
     <header className="app-header">
@@ -69,6 +71,17 @@ export const Header: React.FC<HeaderProps> = ({
                 <Flame size={16} />
                 <span>ปัดผ้า</span>
               </button>
+
+              {onOpenScanner && (
+                <button
+                  className="desktop-nav-item scanner-nav-btn"
+                  onClick={onOpenScanner}
+                  id="header-nav-scanner"
+                >
+                  <Camera size={16} />
+                  <span>สแกนผ้า</span>
+                </button>
+              )}
 
               <button
                 className={`desktop-nav-item ${activeTab === 'wisdom' ? 'active' : ''}`}
@@ -239,6 +252,19 @@ export const Header: React.FC<HeaderProps> = ({
               aria-label="ล้างคำค้นหา"
             >
               <X size={15} />
+            </button>
+          )}
+
+          {onOpenScanner && (
+            <button
+              className="search-camera-btn"
+              onClick={onOpenScanner}
+              title="ถ่ายรูปหรืออัปโหลดสแกนลายผ้าด้วย AI"
+              aria-label="ถ่ายรูปสแกนลายผ้า"
+              id="btn-search-camera"
+            >
+              <Camera size={16} />
+              <span className="search-camera-label">สแกนผ้า</span>
             </button>
           )}
         </div>
