@@ -228,7 +228,7 @@ export const SarnThaiChatBotModal: React.FC<SarnThaiChatBotModalProps> = ({
             <div className="aichat-avatar-wrapper">
               <img 
                 src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80" 
-                alt="SarnThai ChatBot" 
+                alt="SanThai ChatBot" 
                 className="aichat-avatar-img"
               />
               <span className="aichat-online-dot" />
@@ -236,7 +236,7 @@ export const SarnThaiChatBotModal: React.FC<SarnThaiChatBotModalProps> = ({
 
             <div className="aichat-header-text">
               <div className="aichat-name-row">
-                <h4>SarnThai ChatBot</h4>
+                <h4>SanThai ChatBot</h4>
                 <span className="aichat-badge-ai">
                   <Sparkles size={11} /> ผู้ช่วยผ้าไทย AI
                 </span>
@@ -375,7 +375,7 @@ export const SarnThaiChatBotModal: React.FC<SarnThaiChatBotModalProps> = ({
   );
 };
 
-/* Floating Trigger Button for SarnThai ChatBot */
+/* Floating Trigger Button for SanThai ChatBot */
 interface SarnThaiChatBotTriggerProps {
   onClick: () => void;
   isOpen: boolean;
@@ -392,16 +392,20 @@ export const SarnThaiChatBotTrigger: React.FC<SarnThaiChatBotTriggerProps> = ({
       <button 
         className="sarnthai-bot-floating-btn"
         onClick={onClick}
-        title="SarnThai ChatBot (OpenTyphoon AI)"
-        aria-label="SarnThai ChatBot"
+        title="SanThai ChatBot (OpenTyphoon AI)"
+        aria-label="SanThai ChatBot"
       >
         <div className="sarnthai-bot-icon-glow">
           <Sparkles size={20} className="sparkle-icon" />
         </div>
         <span className="sarnthai-bot-label">
-          SarnThai ChatBot
+          SanThai ChatBot
         </span>
       </button>
     </div>
   );
 };
+
+export const SanThaiChatBotModal = SarnThaiChatBotModal;
+export const SanThaiChatBotTrigger = SarnThaiChatBotTrigger;
+

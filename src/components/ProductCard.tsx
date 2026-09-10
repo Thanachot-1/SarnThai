@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Product } from '../types';
-import { Heart, ShoppingBag } from 'lucide-react';
+import { Heart, ShoppingBag, Trash2 } from 'lucide-react';
 
 interface ProductCardProps {
   product: Product;
@@ -8,6 +8,8 @@ interface ProductCardProps {
   onToggleLike: (productId: string) => void;
   onClick: (product: Product) => void;
   onAddToCart?: (product: Product) => void;
+  isAdmin?: boolean;
+  onDeleteProduct?: (productId: string) => void;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
@@ -16,6 +18,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   onToggleLike,
   onClick,
   onAddToCart,
+  isAdmin = false,
+  onDeleteProduct,
 }) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -28,6 +32,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const handleCartClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (onAddToCart) onAddToCart(product);
+  };
+
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (window.confirm(`🛡️ [สิทธิ์ผู้ดูแลระบบ Admin]\nต้องการลบผ้า "${product.title}" (${product.patternName}) ออกจากตลาดใช่หรือไม่?`)) {
+      if (onDeleteProduct) onDeleteProduct(product.id);
+    }
   };
 
   const imageSrc = hasError || !product.images[0] ? '/images/mudmee.jpg' : product.images[0];
@@ -63,6 +74,36 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         <span className="product-province-tag">
           📍 จ.{product.province}
         </span>
+
+        {/* Admin Quick Delete Icon Button on Card */}
+        {isAdmin && onDeleteProduct && (
+          <button
+            className="product-admin-card-delete-btn"
+            onClick={handleDeleteClick}
+            title="🛡️ ลบสินค้านี้ (สิทธิ์ Admin)"
+            aria-label="ลบสินค้า"
+            style={{
+              position: 'absolute',
+              top: '8px',
+              left: '8px',
+              background: 'rgba(230, 57, 70, 0.9)',
+              color: 'white',
+              border: '1.5px solid rgba(255,255,255,0.85)',
+              borderRadius: '50%',
+              width: '28px',
+              height: '28px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              zIndex: 10,
+              boxShadow: '0 2px 5px rgba(0,0,0,0.3)',
+              transition: 'transform 0.15s ease'
+            }}
+          >
+            <Trash2 size={13} />
+          </button>
+        )}
 
         <button
           className={`product-like-btn ${isLiked ? 'liked' : ''}`}

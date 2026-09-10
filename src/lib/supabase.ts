@@ -27,6 +27,6 @@ export const supabase = isSupabaseConfigured
 
 if (!isSupabaseConfigured) {
   console.info(
-    '💡 [SarnThai] ยังไม่ได้เชื่อมต่อ Supabase Keys ในไฟล์ .env ระบบจะใช้ Local Database Storage ในเครื่องจนกว่าจะระบุ VITE_SUPABASE_URL และ VITE_SUPABASE_ANON_KEY'
+    '💡 [SanThai] ยังไม่ได้เชื่อมต่อ Supabase Keys ในไฟล์ .env ระบบจะใช้ Local Database Storage ในเครื่องจนกว่าจะระบุ VITE_SUPABASE_URL และ VITE_SUPABASE_ANON_KEY'
   );
 }

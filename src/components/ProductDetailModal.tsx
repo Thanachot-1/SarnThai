@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Product } from '../types';
+import { Product, UserProfile } from '../types';
 import { 
   X, 
   ZoomIn, 
@@ -12,7 +12,9 @@ import {
   Heart,
   ShieldCheck,
   ShoppingBag,
-  CreditCard
+  CreditCard,
+  Trash2,
+  ShieldAlert
 } from 'lucide-react';
 
 interface ProductDetailModalProps {
@@ -24,6 +26,8 @@ interface ProductDetailModalProps {
   onOpenChat: (product: Product) => void;
   onAddToCart: (product: Product) => void;
   onBuyNow: (product: Product) => void;
+  currentUser?: UserProfile | null;
+  onDeleteProduct?: (productId: string) => void;
 }
 
 export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
@@ -35,6 +39,8 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   onOpenChat,
   onAddToCart,
   onBuyNow,
+  currentUser,
+  onDeleteProduct,
 }) => {
   const [isZoomed, setIsZoomed] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -75,6 +81,23 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     showToast(`เพิ่ม "${product.patternName}" ลงตะกร้าแล้ว`);
   };
 
+  const isAdmin = currentUser?.role === 'admin';
+  const isOwner = !!(currentUser && (currentUser.id === product.seller.id || (currentUser.phone && product.seller.phone === currentUser.phone)));
+  const canDelete = isAdmin || isOwner;
+
+  const handleDeleteProduct = () => {
+    const confirmMsg = isAdmin 
+      ? `🛡️ [โหมดผู้ดูแลระบบ Admin]\nคุณแน่ใจหรือไม่ว่าต้องการลบผ้า "${product.title}" (${product.patternName}) ออกจากตลาด SanThai ทั้งหมด?`
+      : `คุณแน่ใจหรือไม่ว่าต้องการลบผ้า "${product.title}" ออกจากร้านค้าของคุณ?`;
+    
+    if (window.confirm(confirmMsg)) {
+      if (onDeleteProduct) {
+        onDeleteProduct(product.id);
+        onClose();
+      }
+    }
+  };
+
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal-sheet product-detail-sheet" onClick={(e) => e.stopPropagation()}>
@@ -85,12 +108,39 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             <span className="badge-tag badge-kram" style={{ marginBottom: '2px' }}>
               📍 ภาค{product.region} • จ.{product.province}
             </span>
-            <h3 style={{ fontSize: '15px', color: 'var(--text-main)' }}>
+            <h3 style={{ fontSize: '15px', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '6px' }}>
               รายละเอียดผืนผ้า
+              {isAdmin && (
+                <span
+                  style={{
+                    fontSize: '10px',
+                    fontWeight: 700,
+                    background: '#FFE5A3',
+                    color: '#8A5A16',
+                    padding: '2px 6px',
+                    borderRadius: '4px',
+                    border: '1px solid #D4A359'
+                  }}
+                >
+                  ADMIN
+                </span>
+              )}
             </h3>
           </div>
 
           <div style={{ display: 'flex', gap: '6px' }}>
+            {canDelete && (
+              <button 
+                className="modal-close-btn" 
+                onClick={handleDeleteProduct}
+                title={isAdmin ? "🛡️ ลบสินค้านี้ (สิทธิ์ Admin)" : "ลบสินค้านี้"}
+                style={{ color: '#E63946', background: 'rgba(230, 57, 70, 0.12)' }}
+                aria-label="ลบสินค้า"
+                id="btn-modal-delete-product"
+              >
+                <Trash2 size={16} />
+              </button>
+            )}
             <button 
               className="modal-close-btn" 
               onClick={handleShare}
@@ -347,6 +397,58 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 <span>แชทด่วน</span>
               </button>
             </div>
+
+            {/* Admin Management Action Box */}
+            {isAdmin && (
+              <div
+                style={{
+                  marginTop: '16px',
+                  padding: '12px 14px',
+                  background: '#FFF5F5',
+                  border: '1.5px dashed #FEB2B2',
+                  borderRadius: 'var(--radius-sm)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '10px'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <ShieldAlert size={20} color="#E63946" />
+                  <div>
+                    <div style={{ fontSize: '12.5px', fontWeight: 700, color: '#9B1C1C' }}>
+                      สิทธิ์ผู้ดูแลระบบ (Admin)
+                    </div>
+                    <div style={{ fontSize: '11px', color: '#C53030' }}>
+                      คุณสามารถลบผืนผ้านี้ออกจากระบบได้ทันที
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleDeleteProduct}
+                  style={{
+                    background: '#E63946',
+                    color: 'white',
+                    border: 'none',
+                    padding: '8px 14px',
+                    borderRadius: 'var(--radius-xs)',
+                    fontSize: '12.5px',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '5px',
+                    whiteSpace: 'nowrap',
+                    boxShadow: '0 2px 4px rgba(230, 57, 70, 0.25)'
+                  }}
+                  id="btn-admin-delete-product"
+                >
+                  <Trash2 size={15} />
+                  <span>ลบสินค้านี้</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
 

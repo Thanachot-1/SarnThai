@@ -230,14 +230,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               </div>
             )}
 
-            {/* EMAIL */}
+            {/* EMAIL / USERNAME */}
             <div className="form-group">
-              <label style={{ fontSize: '12px' }}>อีเมล (Email)</label>
+              <label style={{ fontSize: '12px' }}>
+                {tab === 'login' ? 'อีเมล หรือ ชื่อผู้ใช้งาน (Email / Username)' : 'อีเมล (Email)'}
+              </label>
               <input
-                type="email"
+                type={tab === 'login' ? 'text' : 'email'}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="your.email@domain.com"
+                placeholder={tab === 'login' ? "อีเมลของคุณ หรือ 'admin'" : 'your.email@domain.com'}
                 required
               />
             </div>
@@ -249,11 +251,56 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="ความยาวอย่างน้อย 6 ตัวอักษร"
-                minLength={6}
+                placeholder={tab === 'login' ? "รหัสผ่าน หรือ 'admin1234'" : "ความยาวอย่างน้อย 6 ตัวอักษร"}
+                minLength={tab === 'login' ? 4 : 6}
                 required
               />
             </div>
+
+            {/* ADMIN LOGIN QUICK HINT (FOR LOGIN TAB) */}
+            {tab === 'login' && (
+              <div
+                style={{
+                  margin: '10px 0 14px',
+                  padding: '9px 12px',
+                  background: 'rgba(212, 163, 89, 0.12)',
+                  border: '1px dashed #D4A359',
+                  borderRadius: 'var(--radius-sm)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '8px'
+                }}
+              >
+                <div style={{ fontSize: '11.5px', color: '#7A4E12', lineHeight: 1.4 }}>
+                  🛡️ <strong>เข้าสู่ระบบด้วยสิทธิ์ผู้ดูแลระบบ (Admin):</strong>
+                  <div style={{ marginTop: '2px', color: '#8A5A16' }}>
+                    User: <strong>admin</strong> | Pass: <strong>admin1234</strong>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail('admin');
+                    setPassword('admin1234');
+                  }}
+                  style={{
+                    fontSize: '11px',
+                    padding: '5px 10px',
+                    background: 'var(--accent-gold)',
+                    color: '#2A1806',
+                    borderRadius: '4px',
+                    fontWeight: 600,
+                    border: 'none',
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                    boxShadow: '0 1px 2px rgba(0,0,0,0.1)'
+                  }}
+                >
+                  คลิกกรอกทันที
+                </button>
+              </div>
+            )}
 
             {/* REGISTRATION EXTRA FIELDS */}
             {tab === 'register' && (

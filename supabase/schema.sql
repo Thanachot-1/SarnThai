@@ -1,6 +1,6 @@
 -- ==============================================================================
--- SARNTHAI MARKETPLACE - SUPABASE DATABASE SCHEMA
--- ตลาดกลางผ้าลายไทย & ผ้าทอมือ (SarnThai Database)
+-- SANTHAI MARKETPLACE - SUPABASE DATABASE SCHEMA
+-- ตลาดกลางผ้าลายไทย & ผ้าทอมือ (SanThai Database)
 -- ==============================================================================
 
 -- 1. Enable UUID Extension

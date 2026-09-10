@@ -234,12 +234,19 @@ export const App: React.FC = () => {
     showToast('อัปเดตสถานะผืนผ้าเรียบร้อยแล้ว');
   };
 
-  // Delete Product in Supabase
+  // Delete Product in Supabase / Local DB
   const handleDeleteProduct = async (productId: string) => {
-    if (window.confirm('คุณต้องการลบรายการผืนผ้านี้ใช่หรือไม่?')) {
+    try {
       await productService.deleteProduct(productId);
       setProducts((prev) => prev.filter((p) => p.id !== productId));
-      showToast('ลบรายการผืนผ้าแล้ว');
+      if (selectedProduct?.id === productId) {
+        setIsDetailOpen(false);
+        setSelectedProduct(null);
+      }
+      showToast('ลบรายการผืนผ้าออกจากตลาดเรียบร้อยแล้ว 🗑️');
+    } catch (e) {
+      console.error('Failed to delete product:', e);
+      showToast('เกิดข้อผิดพลาดในการลบสินค้า');
     }
   };
 
@@ -579,6 +586,8 @@ export const App: React.FC = () => {
                       setIsDetailOpen(true);
                     }}
                     onAddToCart={(p) => handleAddToCart(p, 1)}
+                    isAdmin={currentUser?.role === 'admin'}
+                    onDeleteProduct={handleDeleteProduct}
                   />
                 ))}
               </div>
@@ -664,6 +673,7 @@ export const App: React.FC = () => {
           activeTab={activeTab}
           onTabChange={handleTabChange}
           unreadChatCount={0}
+          currentUser={currentUser}
         />
 
         {/* Product Detail Modal */}
@@ -676,6 +686,8 @@ export const App: React.FC = () => {
           onOpenChat={handleOpenChatFromDetail}
           onAddToCart={(p) => handleAddToCart(p, 1)}
           onBuyNow={handleBuyNow}
+          currentUser={currentUser}
+          onDeleteProduct={handleDeleteProduct}
         />
 
         {/* Create Post Wizard Modal (+ โพสต์ขายผ้า) */}

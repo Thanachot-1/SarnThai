@@ -108,7 +108,7 @@ export const Header: React.FC<HeaderProps> = ({
                 onClick={() => onTabChange('seller')}
               >
                 <Store size={16} />
-                <span>ร้านของฉัน</span>
+                <span>{currentUser?.role === 'admin' ? 'จัดการผ้า (Admin)' : 'ร้านของฉัน'}</span>
               </button>
 
               <button
@@ -127,10 +127,10 @@ export const Header: React.FC<HeaderProps> = ({
             {onOpenChatBot && (
               <button
                 className="header-icon-btn"
-                title="SarnThai ChatBot (OpenTyphoon AI)"
+                title="SanThai ChatBot (OpenTyphoon AI)"
                 onClick={onOpenChatBot}
                 id="header-btn-ai-chat"
-                aria-label="SarnThai ChatBot"
+                aria-label="SanThai ChatBot"
               >
                 <Sparkles size={17} color="var(--accent-gold)" />
               </button>
@@ -209,9 +209,10 @@ export const Header: React.FC<HeaderProps> = ({
                   src={currentUser.avatar || 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80'}
                   alt={currentUser.name}
                   className="header-user-avatar"
+                  style={currentUser.role === 'admin' ? { border: '2px solid #D4A359' } : {}}
                 />
                 <span className="header-user-name">
-                  {currentUser.name.split(' ')[0]}
+                  {currentUser.role === 'admin' ? '🛡️ Admin' : currentUser.name.split(' ')[0]}
                 </span>
                 <button
                   onClick={onLogout}

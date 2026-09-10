@@ -98,7 +98,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish, isDataRead
           <div className="splash-logo-glow" />
           <img
             src="/logo.svg"
-            alt="สานไทย SarnThai"
+            alt="สานไทย SanThai"
             className="splash-logo-image"
           />
         </div>
@@ -108,7 +108,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish, isDataRead
           <h1 className="splash-title">
             สานไทย
             <span className="splash-subtitle-badge">
-              <Sparkles size={11} /> SARNTHAI
+              <Sparkles size={11} /> SANTHAI
             </span>
           </h1>
           <p className="splash-tagline">

@@ -1,5 +1,5 @@
 /**
- * SarnThai - Gemini Vision Service
+ * SanThai - Gemini Vision Service
  * ระบบวิเคราะห์และจำแนกชนิดผ้าไทยด้วย Google Gemini 2.5 Flash Vision LLM
  */
 
@@ -11,16 +11,16 @@ export interface FabricAnalysisResult {
   confidenceScore: number;
   visualFeatures: string;
   culturalMeaning: string;
-  matchingCategoryKey?: string; // สำหรับนำไปจับคู่กับหมวดหมู่ใน SarnThai
+  matchingCategoryKey?: string; // สำหรับนำไปจับคู่กับหมวดหมู่ใน SanThai
 }
 
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || 'AIzaSyAZ6uWiE8aSYMpd4c4-1OqTt-MZGIL5uSY';
 const GEMINI_MODEL = import.meta.env.VITE_GEMINI_MODEL || 'gemini-2.5-flash';
 
 /**
- * แปลงหมวดหมู่ที่วิเคราะห์ได้ให้ตรงกับ Categories ใน SarnThai
+ * แปลงหมวดหมู่ที่วิเคราะห์ได้ให้ตรงกับ Categories ใน SanThai
  */
-function mapToSarnThaiCategory(fabricType: string, patternName: string): string {
+function mapToSanThaiCategory(fabricType: string, patternName: string): string {
   const text = (fabricType + ' ' + patternName).toLowerCase();
   if (text.includes('มัดหมี่')) return 'ผ้าไหมมัดหมี่';
   if (text.includes('คราม') || text.includes('ย้อมคราม')) return 'ผ้าคราม';
@@ -110,7 +110,7 @@ export async function analyzeFabricWithGemini(
       .trim();
 
     const parsed: FabricAnalysisResult = JSON.parse(cleanedJson);
-    parsed.matchingCategoryKey = mapToSarnThaiCategory(parsed.fabricType, parsed.patternName);
+    parsed.matchingCategoryKey = mapToSanThaiCategory(parsed.fabricType, parsed.patternName);
 
     return parsed;
   } catch (error) {

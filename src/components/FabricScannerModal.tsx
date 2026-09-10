@@ -560,7 +560,7 @@ export const FabricScannerModal: React.FC<FabricScannerModalProps> = ({
                     id="btn-result-ask-chatbot"
                   >
                     <MessageCircle size={16} />
-                    <span>สอบถาม SarnThai ChatBot</span>
+                    <span>สอบถาม SanThai ChatBot</span>
                   </button>
                 </div>
               </div>

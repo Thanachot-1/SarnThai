@@ -14,7 +14,7 @@ export type NavTab = 'explore' | 'swipe' | 'wisdom' | 'create' | 'chat' | 'selle
 
 export type ProductStatus = 'available' | 'reserved' | 'sold';
 
-export type UserRole = 'seller' | 'buyer';
+export type UserRole = 'seller' | 'buyer' | 'admin';
 
 export interface UserProfile {
   id: string;

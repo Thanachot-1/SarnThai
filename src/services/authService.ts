@@ -110,6 +110,34 @@ export const authService = {
 
   // Login / Sign In
   async signIn(email: string, password: string): Promise<{ user: UserProfile | null; error: string | null }> {
+    const trimmedInput = email.trim().toLowerCase();
+
+    // 1. Admin Pre-configured Account (admin / admin1234)
+    if (
+      trimmedInput === 'admin' || 
+      trimmedInput === 'admin@santhai.com' || 
+      trimmedInput === 'admin@admin.com'
+    ) {
+      if (password === 'admin1234') {
+        const adminProfile: UserProfile = {
+          id: 'admin_master_001',
+          email: 'admin@santhai.com',
+          role: 'admin',
+          name: 'ผู้ดูแลระบบ (Admin)',
+          shopName: 'ศูนย์ดูแลระบบ SanThai',
+          phone: '089-999-9999',
+          province: 'กรุงเทพมหานคร',
+          lineId: 'admin_santhai',
+          avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
+          verified: true,
+        };
+        localStorage.setItem(AUTH_USER_KEY, JSON.stringify(adminProfile));
+        return { user: adminProfile, error: null };
+      } else {
+        return { user: null, error: 'รหัสผ่านแอดมินไม่ถูกต้อง' };
+      }
+    }
+
     if (isSupabaseConfigured && supabase) {
       try {
         const { data, error } = await supabase.auth.signInWithPassword({

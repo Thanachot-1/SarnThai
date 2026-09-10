@@ -1,6 +1,6 @@
 import React from 'react';
-import { NavTab } from '../types';
-import { Sparkles, Plus, MessageCircle, Store, Flame } from 'lucide-react';
+import { NavTab, UserProfile } from '../types';
+import { Sparkles, Plus, MessageCircle, Store, Flame, ShieldCheck } from 'lucide-react';
 
 export type { NavTab };
 
@@ -8,12 +8,14 @@ interface BottomNavProps {
   activeTab: NavTab;
   onTabChange: (tab: NavTab) => void;
   unreadChatCount?: number;
+  currentUser?: UserProfile | null;
 }
 
 export const BottomNav: React.FC<BottomNavProps> = ({
   activeTab,
   onTabChange,
   unreadChatCount = 1,
+  currentUser,
 }) => {
   return (
     <nav className="bottom-nav">
@@ -77,8 +79,8 @@ export const BottomNav: React.FC<BottomNavProps> = ({
         onClick={() => onTabChange('seller')}
         id="nav-seller"
       >
-        <Store size={22} />
-        <span>ร้านของฉัน</span>
+        {currentUser?.role === 'admin' ? <ShieldCheck size={22} color="#D4A359" /> : <Store size={22} />}
+        <span>{currentUser?.role === 'admin' ? 'แอดมิน' : 'ร้านของฉัน'}</span>
       </button>
     </nav>
   );

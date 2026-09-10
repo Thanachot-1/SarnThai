@@ -73,19 +73,38 @@ export const SellerDashboard: React.FC<SellerDashboardProps> = ({
     );
   }
 
-  // If Logged In: Only show products belonging to THIS user
-  const myProducts = products.filter(
-    (p) => p.seller.id === currentUser.id || (currentUser.phone && p.seller.phone === currentUser.phone)
-  );
+  const isAdmin = currentUser.role === 'admin';
 
-  const totalViews = myProducts.reduce((acc, p) => acc + (p.views || 0), 0);
-  const totalLikes = myProducts.reduce((acc, p) => acc + (p.likes || 0), 0);
-  const activeCount = myProducts.filter((p) => p.status === 'available').length;
+  // If Admin: Show ALL products in marketplace. If Seller: Only show own products
+  const displayedProducts = isAdmin
+    ? products
+    : products.filter(
+        (p) => p.seller.id === currentUser.id || (currentUser.phone && p.seller.phone === currentUser.phone)
+      );
+
+  const totalViews = displayedProducts.reduce((acc, p) => acc + (p.views || 0), 0);
+  const totalLikes = displayedProducts.reduce((acc, p) => acc + (p.likes || 0), 0);
+  const activeCount = displayedProducts.filter((p) => p.status === 'available').length;
+
+  const handleDelete = (productId: string, title: string) => {
+    const confirmMsg = isAdmin
+      ? `🛡️ [โหมดผู้ดูแลระบบ Admin]\nต้องการลบผ้า "${title}" ออกจากตลาด SanThai ใช่หรือไม่? การลบจะมีผลทันที`
+      : `คุณต้องการลบรายการผ้า "${title}" ใช่หรือไม่?`;
+    if (window.confirm(confirmMsg)) {
+      onDeleteProduct(productId);
+    }
+  };
 
   return (
     <div className="seller-dashboard-container">
-      {/* Seller Header Profile (Only Real User Data) */}
-      <div className="seller-hero-card">
+      {/* Seller / Admin Header Profile Card */}
+      <div 
+        className="seller-hero-card"
+        style={isAdmin ? {
+          background: 'linear-gradient(135deg, #2D142C 0%, #4D1745 50%, #1E324F 100%)',
+          border: '1px solid rgba(212, 163, 89, 0.4)'
+        } : {}}
+      >
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px' }}>
           <img
             src={
@@ -93,17 +112,34 @@ export const SellerDashboard: React.FC<SellerDashboardProps> = ({
               'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80'
             }
             alt={currentUser.name}
-            style={{ width: '48px', height: '48px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.8)', objectFit: 'cover' }}
+            style={{ width: '48px', height: '48px', borderRadius: '50%', border: '2px solid #D4A359', objectFit: 'cover' }}
           />
           <div>
-            <h3 style={{ fontSize: '16px', fontWeight: 600, color: 'white', display: 'flex', alignItems: 'center', gap: '5px' }}>
-              {currentUser.shopName || currentUser.name}
-              {currentUser.verified && (
-                <CheckCircle2 size={15} color="#D4A359" fill="#D4A359" stroke="#1E324F" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <h3 style={{ fontSize: '16px', fontWeight: 600, color: 'white', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                {currentUser.shopName || currentUser.name}
+                {currentUser.verified && (
+                  <CheckCircle2 size={15} color="#D4A359" fill="#D4A359" stroke="#1E324F" />
+                )}
+              </h3>
+              {isAdmin && (
+                <span
+                  style={{
+                    fontSize: '10px',
+                    fontWeight: 700,
+                    background: '#D4A359',
+                    color: '#2A1400',
+                    padding: '2px 6px',
+                    borderRadius: '4px',
+                    letterSpacing: '0.5px'
+                  }}
+                >
+                  ADMIN
+                </span>
               )}
-            </h3>
+            </div>
             <div style={{ fontSize: '12px', color: '#D2DEEB' }}>
-              📍 จ.{currentUser.province || 'ไม่ระบุ'} • {currentUser.email}
+              {isAdmin ? '🛡️ แผงควบคุมระบบ (สิทธิ์ลบและจัดการสินค้าทุกรายการ)' : `📍 จ.${currentUser.province || 'ไม่ระบุ'} • ${currentUser.email}`}
             </div>
           </div>
         </div>
@@ -111,16 +147,18 @@ export const SellerDashboard: React.FC<SellerDashboardProps> = ({
         {/* Quick Stats Grid */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', borderTop: '1px solid rgba(255,255,255,0.15)', paddingTop: '12px' }}>
           <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '18px', fontWeight: 700, color: '#FFFFFF' }}>{myProducts.length}</div>
-            <div style={{ fontSize: '11px', color: '#B0C4DE' }}>ผ้าของฉัน (ผืน)</div>
+            <div style={{ fontSize: '18px', fontWeight: 700, color: '#FFFFFF' }}>{displayedProducts.length}</div>
+            <div style={{ fontSize: '11px', color: '#B0C4DE' }}>
+              {isAdmin ? 'ผ้าทั้งหมดในระบบ' : 'ผ้าของฉัน (ผืน)'}
+            </div>
           </div>
           <div style={{ textAlign: 'center' }}>
             <div style={{ fontSize: '18px', fontWeight: 700, color: '#D4A359' }}>{totalViews}</div>
-            <div style={{ fontSize: '11px', color: '#B0C4DE' }}>ยอดเข้าชม</div>
+            <div style={{ fontSize: '11px', color: '#B0C4DE' }}>ยอดเข้าชมรวม</div>
           </div>
           <div style={{ textAlign: 'center' }}>
             <div style={{ fontSize: '18px', fontWeight: 700, color: '#FF7B72' }}>{totalLikes}</div>
-            <div style={{ fontSize: '11px', color: '#B0C4DE' }}>คนกดใจ</div>
+            <div style={{ fontSize: '11px', color: '#B0C4DE' }}>ยอดกดใจรวม</div>
           </div>
         </div>
       </div>
@@ -132,20 +170,25 @@ export const SellerDashboard: React.FC<SellerDashboardProps> = ({
         id="btn-seller-add-product"
       >
         <Plus size={20} strokeWidth={2.5} />
-        <span>ลงขายผ้าผืนใหม่ (+ เพิ่มสินค้า)</span>
+        <span>{isAdmin ? 'ลงขายผ้าใหม่ในนามแอดมิน (+ เพิ่มสินค้า)' : 'ลงขายผ้าผืนใหม่ (+ เพิ่มสินค้า)'}</span>
       </button>
 
       {/* Product List Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
         <h4 style={{ fontSize: '15px', fontWeight: 600 }}>
-          รายการผ้าของฉัน ({activeCount} พร้อมส่ง)
+          {isAdmin ? `รายการผ้าทั้งหมดในระบบ (${displayedProducts.length} รายการ)` : `รายการผ้าของฉัน (${activeCount} พร้อมส่ง)`}
         </h4>
+        {isAdmin && (
+          <span style={{ fontSize: '11.5px', color: '#C53030', fontWeight: 600 }}>
+            🛡️ สามารถกดปุ่มถังขยะเพื่อลบผ้าใดๆ ได้ทันที
+          </span>
+        )}
       </div>
 
       {/* Products List */}
-      {myProducts.length > 0 ? (
+      {displayedProducts.length > 0 ? (
         <div className="seller-products-grid">
-          {myProducts.map((p) => (
+          {displayedProducts.map((p) => (
             <div
               key={p.id}
               style={{
@@ -159,15 +202,22 @@ export const SellerDashboard: React.FC<SellerDashboardProps> = ({
               }}
             >
               <img
-                src={p.images[0]}
+                src={p.images[0] || '/images/mudmee.jpg'}
                 alt={p.title}
                 style={{ width: '64px', height: '64px', borderRadius: '8px', objectFit: 'cover', cursor: 'pointer' }}
                 onClick={() => onSelectProduct(p)}
               />
 
               <div style={{ flexGrow: 1, minWidth: 0 }}>
-                <div style={{ fontSize: '11px', color: 'var(--accent-terracotta)', fontWeight: 600 }}>
-                  {p.patternName}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: '11px', color: 'var(--accent-terracotta)', fontWeight: 600 }}>
+                    {p.patternName}
+                  </span>
+                  {isAdmin && (
+                    <span style={{ fontSize: '10.5px', color: 'var(--primary-kram)', background: 'var(--primary-kram-light)', padding: '1px 5px', borderRadius: '3px' }}>
+                      🏪 {p.seller.shopName || p.seller.name}
+                    </span>
+                  )}
                 </div>
                 <h5
                   style={{
@@ -223,9 +273,17 @@ export const SellerDashboard: React.FC<SellerDashboardProps> = ({
 
               {/* Delete action */}
               <button
-                onClick={() => onDeleteProduct(p.id)}
-                title="ลบรายการนี้"
-                style={{ color: 'var(--text-light)', padding: '6px' }}
+                onClick={() => handleDelete(p.id, p.title)}
+                title={isAdmin ? "🛡️ ลบสินค้านี้ (สิทธิ์ Admin)" : "ลบรายการนี้"}
+                style={{ 
+                  color: '#E63946', 
+                  padding: '8px', 
+                  background: 'rgba(230, 57, 70, 0.08)',
+                  borderRadius: '6px',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
+                aria-label="ลบสินค้า"
               >
                 <Trash2 size={16} />
               </button>
@@ -236,13 +294,14 @@ export const SellerDashboard: React.FC<SellerDashboardProps> = ({
         <div className="empty-state" style={{ padding: '32px 16px', background: 'var(--bg-surface)', borderRadius: 'var(--radius-md)', border: '1px dashed var(--border-color)' }}>
           <PackageOpen size={40} className="empty-icon" />
           <h5 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '4px' }}>
-            คุณยังไม่มีรายการผ้าที่ลงขาย
+            {isAdmin ? 'ยังไม่มีรายการผ้าในระบบ' : 'คุณยังไม่มีรายการผ้าที่ลงขาย'}
           </h5>
           <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '14px' }}>
-            กดปุ่ม "ลงขายผ้าผืนใหม่" ด้านบนเพื่อโพสต์ผ้าลายไทยของคุณขึ้นสู่ตลาด
+            {isAdmin ? 'สามารถเพิ่มผ้าตัวอย่างได้ที่ปุ่มลงขายด้านบน' : 'กดปุ่ม "ลงขายผ้าผืนใหม่" ด้านบนเพื่อโพสต์ผ้าลายไทยของคุณขึ้นสู่ตลาด'}
           </p>
         </div>
       )}
     </div>
   );
 };
+
